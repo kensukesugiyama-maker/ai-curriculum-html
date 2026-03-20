@@ -154,6 +154,83 @@
       padding: 0.1em 0.35em;
       border-radius: 4px;
     }
+    /* 図表 */
+    figure.diagram {
+      margin: 1.25rem 0;
+      padding: 0;
+    }
+    figure.diagram figcaption {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.5rem;
+      font-weight: 600;
+    }
+    .diagram-inner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 0.75rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .diagram-inner .mermaid {
+      display: flex;
+      justify-content: center;
+      min-height: 80px;
+    }
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    @media (min-width: 560px) {
+      .compare { grid-template-columns: 1fr 1fr; }
+    }
+    .compare-box {
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border);
+    }
+    .compare-box h4 {
+      margin: 0 0 0.6rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .compare-box.bad {
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+    .compare-box.bad h4 { color: #991b1b; }
+    .compare-box.good {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+    .compare-box.good h4 { color: #166534; }
+    .compare-box p:last-child { margin-bottom: 0; }
+    .overview-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem 0.5rem;
+      margin: 1.25rem 0 0;
+      padding: 1rem 1.1rem;
+      background: var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+    .overview-strip .step-pill {
+      background: var(--accent-soft);
+      color: #1e3a8a;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .overview-strip .arrow { color: var(--muted); user-select: none; }
   </style>
 </head>
 <body>
@@ -161,11 +238,32 @@
     <header>
       <h1>わからないからできないをなくす<br />— AIの使い方（対話・マネジメントの考え方）</h1>
       <p class="lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい「進め方」の設計図として使えます。</p>
+      <p class="overview-strip" aria-label="全体の流れ（要約）">
+        <span class="step-pill">1. 状況・目的</span><span class="arrow">→</span>
+        <span class="step-pill">2. AIに質問させる</span><span class="arrow">→</span>
+        <span class="step-pill">3. 納得して実行</span><span class="arrow">→</span>
+        <span class="step-pill">4. 結果を次へ</span>
+      </p>
     </header>
+
+    <figure class="diagram" id="fig-overview">
+      <figcaption>全体像：情報を先に揃えてから動く</figcaption>
+      <div class="diagram-inner">
+        <pre class="mermaid">
+flowchart LR
+  A["状況・目的を伝える"] --> B["AIに『自分へ質問』を依頼"]
+  B --> C["質問のラリーで情報が増える"]
+  C --> D["改善策・選択肢・リスク"]
+  D --> E["納得・実行・検証"]
+  E --> A
+        </pre>
+      </div>
+    </figure>
 
     <nav class="toc" aria-label="目次">
       <h2>目次</h2>
       <ol>
+        <li><a href="#fig-overview">全体像（図）</a></li>
         <li><a href="#why-bad-first">最初に「どうすればいい？」と聞くと弱くなる理由</a></li>
         <li><a href="#better-start">代わりに最初に伝えること</a></li>
         <li><a href="#loop">次の課題にする・納得して実行するループ</a></li>
@@ -180,6 +278,26 @@
     <section id="why-bad-first">
       <h2>1. 最初に「どうすればいい？」と聞くと弱くなる理由</h2>
       <p>情報が足りないままAIに結論を求めると、AIは足りない前提のまま考え始めます。その結果、アウトプットの当たり外れが大きくなりやすい。</p>
+      <div class="compare" aria-label="聞き方の対比">
+        <div class="compare-box bad">
+          <h4>避けたい始め方</h4>
+          <p>いきなり「どうすればいい？」だけを投げる → 穴埋め推論が始まりやすい。</p>
+        </div>
+        <div class="compare-box good">
+          <h4>望ましい始め方</h4>
+          <p>状況・目的を伝えたうえで、「足りないなら質問して」と明示する → 入力の器が広がる。</p>
+        </div>
+      </div>
+      <figure class="diagram">
+        <figcaption>情報不足のまま結論を急ぐと起きること</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart TD
+  A["入力の情報が少ない"] --> B["AIは不足した前提のまま補完"]
+  B --> C["当たり外れの大きい結論になりやすい"]
+          </pre>
+        </div>
+      </figure>
       <div class="card">
         <p><strong>要点：</strong>「教えて」より先に、状況の器を広げる（情報を増やす）設計にすると、出力の質が上がりやすい。</p>
       </div>
@@ -198,6 +316,22 @@
         <p>「状況は〇〇、目的は△△です。自分では次に何をすべきか判断できないので、不足がなくなるまで私に質問してください。十分な情報が揃ったタイミングで、改善策・選択肢・リスクを整理してください。」</p>
       </div>
       <p>こうすると質問のラリーで情報が溜まり、最初から結論を急がない分、出力が安定しやすい。</p>
+      <figure class="diagram">
+        <figcaption>「AIに質問させる」ときの会話の型</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+sequenceDiagram
+  participant U as あなた
+  participant A as AI
+  U->>A: 状況・目的＋「分からないので質問して」
+  loop 情報が足りない間
+    A->>U: 質問
+    U->>A: 回答（事実ベース）
+  end
+  A->>U: 改善策・選択肢・リスクの整理
+          </pre>
+        </div>
+      </figure>
     </section>
 
     <section id="loop">
@@ -212,6 +346,19 @@
       <div class="note">
         <p><strong>留意：</strong>AIを使わないから仮説精度が上がる、ではない。使い方を意識しないと、判断不能のまま回り続けやすい。だからこそ、状況→質問→納得→実行→検証、の型を持つ。</p>
       </div>
+      <figure class="diagram">
+        <figcaption>実行までのループ（アウトプットは「次の課題」扱い）</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart LR
+  O["AIの提案"] --> K["理屈・リスクを掘って納得"]
+  K --> X["小さく実行"]
+  X --> R["結果と解釈"]
+  R --> N["次の状況・目的として入力"]
+  N --> O
+          </pre>
+        </div>
+      </figure>
     </section>
 
     <section id="over-spec">
@@ -226,6 +373,21 @@
         <li>「このやり方の危険・懸念は何か」</li>
       </ul>
       <p>最初から<strong>状況・目的・「質問してから提案して」</strong>とセットにすると、AIが狭い世界の中だけで独りPDCAする状況を避けやすい。</p>
+      <figure class="diagram">
+        <figcaption>ナビの比喩：細かく指定すると「到達の仕方」が固定される</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart TB
+  subgraph S["手順を細かく指定しすぎ"]
+    A["指示の幅"] --> B["実行側の探索余地が減る"]
+    B --> C["ショートカット・別解が見えにくい"]
+  end
+  subgraph W["自分の案＋合ってる？／危険は？"]
+    D["目的と拘束は伝える"] --> E["AIの幅を残したまま推敲できる"]
+  end
+          </pre>
+        </div>
+      </figure>
     </section>
 
     <section id="doctor">
@@ -235,6 +397,20 @@
         <li>「これは絶対〇〇だ」と結論を先に言うと、報告の質が落ち、入力が歪み、アウトプットもズレやすい</li>
         <li>事実・違和感・期限・制約を出し、質問に答える。これが精度を上げる</li>
       </ul>
+      <figure class="diagram">
+        <figcaption>医者と患者：役割を混ぜない</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart LR
+  subgraph NG["入力が弱くなりやすい"]
+    n1["決めつけの結論"] --> n2["事実の報告が歪む"] --> n3["出力もズレる"]
+  end
+  subgraph OK["望ましい"]
+    o1["観測できる事実・制約"] --> o2["AI/医者が質問"] --> o3["整理された提案"]
+  end
+          </pre>
+        </div>
+      </figure>
     </section>
 
     <section id="paradigm">
@@ -255,6 +431,16 @@
       </div>
       <h3>人への依頼・デザインとの共通項</h3>
       <p>「こう作って」と細かく指示すると、その通りになりやすい。目的を伝え、必要ならヒアリングしてほしいと言うと、残りの知性が解放されやすい（相手の能力次第では具体化が必要な場合もある）。</p>
+      <figure class="diagram">
+        <figcaption>バランス：仮説は自分／調査と文章化はAI、が壊れにくい</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart TB
+  H["自分: 仮説・優先順位・リスク許容"] --> M["AI: 質問・整理・反例・文章案"]
+  M --> H
+          </pre>
+        </div>
+      </figure>
     </section>
 
     <section id="responsibility">
@@ -266,6 +452,29 @@
       </ul>
       <div class="card">
         <p><strong>心構え：</strong>優秀な道具が増えたのではなく、<strong>優秀な部下がいるので、自分は上司としてマネジメントする</strong>、と捉えるとブレにくい。</p>
+      </div>
+      <figure class="diagram">
+        <figcaption>関係性：橋渡しで終わらせない</figcaption>
+        <div class="diagram-inner">
+          <pre class="mermaid">
+flowchart TB
+  Boss["あなた（上司）: 意思決定・説明責任"]
+  Staff["AI（部下）: 提案・根拠・反例の補足"]
+  Staff -->|"根拠・文章案"| Boss
+  Boss -->|"納得まで質問・優先"| Staff
+  Boss --> Done["実行と検証"]
+          </pre>
+        </div>
+      </figure>
+      <div class="compare">
+        <div class="compare-box bad">
+          <h4>マネジメントが弱いとき</h4>
+          <p>出力をそのまま上司に渡す「橋渡し」になり、自分は深く説明できない。</p>
+        </div>
+        <div class="compare-box good">
+          <h4>マネジメントが効いているとき</h4>
+          <p>根拠と例外を詰め、自分の言葉で責任を持てる状態まで持っていく。</p>
+        </div>
       </div>
     </section>
 
@@ -280,5 +489,25 @@
       <p>出典：社内対話の文字起こしを要約・再構成。実務では機密情報の取り扱いと組織ルールに従ってください。</p>
     </footer>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      securityLevel: "loose",
+      fontFamily: '"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',
+      themeVariables: {
+        primaryColor: "#dbeafe",
+        primaryTextColor: "#1a1a1a",
+        primaryBorderColor: "#93c5fd",
+        lineColor: "#64748b",
+        secondaryColor: "#f1f5f9",
+        tertiaryColor: "#f8fafc"
+      },
+      flowchart: { htmlLabels: true, curve: "basis", padding: 10 },
+      sequence: { actorMargin: 50, boxMargin: 10 }
+    });
+  </script>
 </body>
 </html>
