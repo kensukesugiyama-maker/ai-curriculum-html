@@ -4,11 +4,13 @@
 
 ## 共有リンク（GitHub Pages）
 
-リポジトリをPushしたあと、GitHub の Settings → Pages で **main ブランチ / root** を選ぶと、次のURLで閲覧できます。
+次のURLをそのままチャットやメールに貼れます。
 
-`https://kensukesugiyama-maker.github.io/ai-curriculum-html/`
+**https://kensukesugiyama-maker.github.io/ai-curriculum-html/**
 
-（初回は反映に1〜2分かかることがあります。）
+リポジトリ：**https://github.com/kensukesugiyama-maker/ai-curriculum-html**
+
+内容を更新したあとは `git push` すると数分以内にサイトへ反映されます（GitHub の Pages ビルド状況はリポジトリの Actions を参照）。
 
 ## ローカルで開く
 
