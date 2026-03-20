@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>わからないからできないをなくす（スマホ版）— AIの使い方</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --safe-t: env(safe-area-inset-top, 0);
+      --safe-b: env(safe-area-inset-bottom, 0);
+      --paper: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --body: #334155;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #1d4ed8;
+      --accent-soft: #eff6ff;
+      --ok: #047857;
+      --ok-bg: #d1fae5;
+      --ok-b: #34d399;
+      --bad: #be123c;
+      --bad-bg: #ffe4e6;
+      --bad-b: #fb7185;
+      --warn-bg: #fffbeb;
+      --warn-b: #fcd34d;
+      --you-bg: #fff7ed;
+      --you-b: #fb923c;
+      --radius: 16px;
+      --tap: 48px;
+      --font: "Noto Sans JP", system-ui, sans-serif;
+      --shadow: 0 8px 30px -18px rgba(15, 23, 42, 0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      padding-bottom: calc(4.5rem + var(--safe-b));
+      font-family: var(--font);
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      color: var(--body);
+      background: var(--paper);
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* 上部：PC切替 */
+    .bar-top {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: calc(0.55rem + var(--safe-t)) 0.9rem 0.55rem;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .bar-top span {
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .bar-top a {
+      min-height: var(--tap);
+      padding: 0 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-decoration: none;
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .wrap {
+      padding: 1rem 1rem 0;
+      max-width: 28rem;
+      margin: 0 auto;
+    }
+
+    .masthead h1 {
+      margin: 0 0 0.75rem;
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+    .masthead-lead {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .thesis {
+      margin: 0 0 1rem;
+      padding: 1rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      font-weight: 700;
+      color: var(--ink);
+      border-left: 4px solid var(--accent);
+      font-size: 0.98rem;
+    }
+    .thesis small {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* 凡例：縦一列 */
+    .legend {
+      margin: 0 0 1.25rem;
+      padding: 0.85rem;
+      background: #f1f5f9;
+      border-radius: var(--radius);
+      border: 1px dashed var(--line);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+    }
+    .sw {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .sw-bad { background: var(--bad-bg); border-color: var(--bad-b); }
+    .sw-ok { background: var(--ok-bg); border-color: var(--ok-b); }
+    .sw-flow { background: var(--accent-soft); border-color: #93c5fd; }
+    .sw-you { background: var(--you-bg); border-color: var(--you-b); }
+
+    /* 目次 */
+    .toc-wrap {
+      margin-bottom: 1.75rem;
+    }
+    .toc-wrap summary {
+      list-style: none;
+      min-height: var(--tap);
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ink);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .toc-wrap summary::-webkit-details-marker { display: none; }
+    .toc-wrap[open] summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    .toc-body {
+      padding: 0.75rem 0.25rem 0.75rem 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .toc-body a {
+      display: block;
+      padding: 0.65rem 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      border-radius: 10px;
+    }
+    .toc-body a:active { background: #e2e8f0; }
+
+    section {
+      margin-bottom: 2.5rem;
+      scroll-margin-top: calc(3.5rem + var(--safe-t));
+    }
+    .sec-head {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      margin-bottom: 0.85rem;
+    }
+    .sec-num {
+      flex-shrink: 0;
+      width: 2.35rem;
+      height: 2.35rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      background: var(--accent);
+    }
+    section h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 900;
+      line-height: 1.45;
+      color: var(--ink);
+    }
+    section h3 {
+      margin: 1.1rem 0 0.4rem;
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    p { margin: 0 0 0.9rem; }
+    ul { margin: 0 0 0.9rem; padding-left: 1.15rem; }
+    li { margin-bottom: 0.35rem; }
+    strong { color: var(--ink); }
+
+    .fig-cap {
+      margin: 0 0 0.55rem;
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    .fig-sub {
+      margin: 0 0 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.85rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 0.85rem;
+    }
+
+    /* 縦フロー共通 */
+    .vflow { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+    .vstep {
+      padding: 0.85rem 0.9rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .vstep--flow { background: var(--accent-soft); border: 1px solid #93c5fd; color: #1e3a8a; }
+    .vstep--you { background: var(--you-bg); border: 2px solid var(--you-b); color: #9a3412; }
+    .vstep .tag { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.2rem; }
+    .vstep--you .tag { color: #c2410c; }
+    .varr {
+      text-align: center;
+      padding: 0.25rem 0;
+      font-size: 1.1rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .vloop {
+      text-align: center;
+      margin-top: 0.35rem;
+      padding: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: var(--accent);
+      background: #eef2ff;
+      border-radius: 12px;
+      border: 1px dashed #a5b4fc;
+    }
+    .vwarn {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: var(--bad-bg);
+      border: 1px solid var(--bad-b);
+      border-radius: var(--radius);
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #9f1239;
+      line-height: 1.55;
+    }
+
+    .tile2 { display: flex; flex-direction: column; gap: 0.65rem; margin: 0.75rem 0; }
+    .tile {
+      padding: 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .tile-bad { background: var(--bad-bg); border: 1px solid var(--bad-b); color: #9f1239; }
+    .tile-ok { background: var(--ok-bg); border: 1px solid var(--ok-b); color: #065f46; }
+    .tile h4 { margin: 0 0 0.35rem; font-size: 0.7rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    .mini-flow { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0; }
+    .mf-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .mf-box { flex: 1; min-width: 0; padding: 0.5rem 0.55rem; border-radius: 10px; text-align: center; }
+    .mf-bad { background: #ffe4e6; border: 1px solid #fb7185; color: #9f1239; }
+    .mf-neu { background: #fff; border: 1px solid var(--line); color: var(--ink); }
+    .mf-ok { background: #d1fae5; border: 1px solid #34d399; color: #065f46; }
+    .mf-arr { color: var(--muted); flex-shrink: 0; }
+
+    .triad { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.5rem 0; }
+    .tri {
+      padding: 0.75rem 0.85rem;
+      border-radius: var(--radius);
+      border: 1px solid #93c5fd;
+      background: var(--accent-soft);
+      font-weight: 800;
+      font-size: 0.92rem;
+      color: #1e3a8a;
+    }
+    .tri note { display: block; margin-top: 0.25rem; font-size: 0.78rem; font-weight: 600; color: #475569; }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .bubble {
+      max-width: 100%;
+      padding: 0.75rem 0.85rem;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+    .bubble-you { align-self: flex-end; background: #f1f5f9; border: 1px solid var(--line); color: var(--ink); border-bottom-right-radius: 4px; }
+    .bubble-ai { align-self: flex-start; background: var(--accent-soft); border: 1px solid #93c5fd; color: #1e3a8a; border-bottom-left-radius: 4px; }
+    .bubble .lab { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.08em; margin-bottom: 0.2rem; opacity: 0.8; }
+    .chat-pill {
+      align-self: center;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: #6d28d9;
+      background: #f5f3ff;
+      border: 1px dashed #c4b5fd;
+      border-radius: 999px;
+    }
+
+    .diamond {
+      margin: 0.35rem auto;
+      width: 100%;
+      max-width: 17rem;
+      padding: 0.75rem;
+      background: var(--you-bg);
+      border: 2px solid var(--you-b);
+      border-radius: 14px;
+      text-align: center;
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #c2410c;
+    }
+
+    .compare-stack { display: flex; flex-direction: column; gap: 0.75rem; }
+    .compare-panel { padding: 0.9rem; border-radius: var(--radius); font-size: 0.88rem; font-weight: 600; line-height: 1.55; }
+    .compare-panel h4 { margin: 0 0 0.4rem; font-size: 0.95rem; font-weight: 900; }
+    .cp-narrow { background: var(--bad-bg); border: 1px solid var(--bad-b); color: #9f1239; }
+    .cp-wide { background: var(--ok-bg); border: 1px solid var(--ok-b); color: #065f46; }
+    .viz-narrow {
+      margin-top: 0.5rem;
+      height: 88px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255,255,255,0.7);
+      border-radius: 10px;
+    }
+    .viz-narrow-inner {
+      width: 36px;
+      height: 72px;
+      background: #fff;
+      border: 2px solid #fb7185;
+      border-radius: 8px;
+    }
+    .viz-wide {
+      margin-top: 0.5rem;
+      min-height: 88px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255,255,255,0.7);
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #047857;
+    }
+
+    .bal-stack { margin: 0.5rem 0; }
+    .bal-row { margin-bottom: 0.45rem; }
+    .bal-label { font-size: 0.78rem; font-weight: 900; margin-bottom: 0.2rem; }
+    .bal-bar { height: 2.5rem; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 900; }
+    .bal-you { background: var(--you-bg); border: 1px solid var(--you-b); color: #9a3412; width: 38%; }
+    .bal-ai { background: var(--accent-soft); border: 1px solid #60a5fa; color: #1d4ed8; width: 100%; margin-top: 0.35rem; }
+
+    .pyramid { display: flex; flex-direction: column; gap: 0.45rem; }
+    .pyr-top {
+      padding: 0.85rem;
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.92rem;
+      background: var(--you-bg);
+      border: 2px solid var(--you-b);
+      border-radius: var(--radius);
+      color: #9a3412;
+    }
+    .pyr-mid {
+      padding: 0.85rem;
+      text-align: center;
+      font-weight: 900;
+      font-size: 0.88rem;
+      background: var(--accent-soft);
+      border: 1px solid #60a5fa;
+      border-radius: var(--radius);
+      color: #1d4ed8;
+    }
+    .pyr-note {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .card {
+      padding: 1rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin: 0.75rem 0;
+      font-size: 0.95rem;
+    }
+    .prompt {
+      margin: 0.75rem 0;
+      padding: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid #bfdbfe;
+      background: linear-gradient(135deg, #eff6ff, #eef2ff);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .prompt .lbl { font-size: 0.68rem; font-weight: 900; color: var(--accent); margin-bottom: 0.4rem; letter-spacing: 0.06em; }
+
+    .warn {
+      padding: 0.9rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--warn-b);
+      background: var(--warn-bg);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #92400e;
+      margin: 0.75rem 0;
+    }
+
+    .flow-list { display: flex; flex-direction: column; gap: 0.55rem; margin: 0.75rem 0; }
+    .flow-row { display: flex; gap: 0.6rem; align-items: flex-start; }
+    .flow-num {
+      flex-shrink: 0;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding: 1.2rem 0 0;
+      border-top: 1px solid var(--line);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); font-weight: 800; text-decoration: none; word-break: break-all; }
+
+    /* 下部：章ジャンプ（親指ゾーン） */
+    .dock {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99;
+      padding: 0.45rem 0.5rem calc(0.45rem + var(--safe-b));
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 0.35rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .dock::-webkit-scrollbar { display: none; }
+    .dock a {
+      flex: 0 0 auto;
+      min-height: 44px;
+      padding: 0 0.65rem;
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: var(--ink);
+      text-decoration: none;
+      background: #f1f5f9;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+    }
+    .dock a:active { background: #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="bar-top">
+    <span>スマホ版</span>
+    <a href="index.html">PC版を開く</a>
+  </div>
+
+  <div class="wrap" id="top">
+    <header class="masthead">
+      <h1>わからないからできないをなくす<br /><span style="font-size:0.92em;color:#64748b">— AIの使い方（スマホレイアウト）</span></h1>
+      <p class="masthead-lead">横に長い図を縦に再配置した版です。内容はPC版（index.html）と同じです。</p>
+      <p class="thesis">
+        中心ルール：いきなり結論を求めない。状況・目的を置き、AIに不足を質問させ、情報が揃ってから整理させる。
+        <small>色の意味は下の凡例どおり。図はすべて縦スクロールだけで追えます。</small>
+      </p>
+      <div class="legend" role="note">
+        <div class="legend-row"><span class="sw sw-bad" aria-hidden="true"></span>赤：避けたい／危うい</div>
+        <div class="legend-row"><span class="sw sw-ok" aria-hidden="true"></span>緑：望ましい流れ</div>
+        <div class="legend-row"><span class="sw sw-flow" aria-hidden="true"></span>青：推奨の手順</div>
+        <div class="legend-row"><span class="sw sw-you" aria-hidden="true"></span>橙：あなたの判断・責任</div>
+      </div>
+    </header>
+
+    <div class="toc-wrap" id="toc-mob">
+      <details>
+        <summary>目次（タップで開閉）</summary>
+        <nav class="toc-body" aria-label="目次">
+          <a href="#fig1">図1 全体モデル</a>
+          <a href="#s1">§1 いきなり聞くと弱い理由</a>
+          <a href="#s2">§2 最初に伝えること</a>
+          <a href="#s3">§3 納得・実行ループ</a>
+          <a href="#s4">§4 指示が細かすぎると</a>
+          <a href="#s5">§5 医者と患者の比喩</a>
+          <a href="#s6">§6 パラダイム</a>
+          <a href="#s7">§7 責任とマネジメント</a>
+          <a href="#s8">§8 ツール</a>
+        </nav>
+      </details>
+    </div>
+
+    <!-- 図1 縦型 -->
+    <section id="fig1">
+      <p class="fig-cap">図1. 全体モデル（推奨の順番）</p>
+      <p class="fig-sub">上から下へ「意味」が積み上がり、最後にループで戻ります。</p>
+      <div class="panel">
+        <div class="vflow">
+          <div class="vstep vstep--flow"><span class="tag">STEP 1</span>入力を置く：状況・目的＋「不足なら質問して」</div>
+          <div class="varr">↓</div>
+          <div class="vstep vstep--flow"><span class="tag">STEP 2</span>対話で厚み：AIの質問 ⇄ 事実ベースの回答（前提が揃う）</div>
+          <div class="varr">↓</div>
+          <div class="vstep vstep--flow"><span class="tag">STEP 3</span>出力は「案」：選択肢・リスク整理（まだ確定ではない）</div>
+          <div class="varr">↓</div>
+          <div class="vstep vstep--you"><span class="tag">STEP 4</span>あなたが検証：納得→小さく実行（責任はここ）</div>
+          <div class="vloop">学び・結果を「次の状況・目的」へ（図1をもう一周）</div>
+        </div>
+        <div class="vwarn">逆パターン：1を飛ばして「どうすれば？」だけ → 2の厚みなしで案へ行きやすい（情報不足のまま結論を急ぐ）</div>
+      </div>
+    </section>
+
+    <section id="s1">
+      <div class="sec-head"><span class="sec-num">1</span><h2>最初に「どうすればいい？」と聞くと弱くなる理由</h2></div>
+      <p>情報が足りないままAIに結論を求めると、AIは足りない前提のまま考え始めます。その結果、アウトプットの当たり外れが大きくなりやすい。</p>
+      <div class="tile2">
+        <div class="tile tile-bad"><h4>意味</h4>いきなり質問だけ → AIが欠けた前提を埋めて進みやすい</div>
+        <div class="tile tile-ok"><h4>意味</h4>状況・目的＋質問依頼 → 対話で前提が揃う</div>
+      </div>
+      <p class="fig-cap">図2. 出発点で意味が変わる</p>
+      <p class="fig-sub">上：弱い。下：望ましい。横スクロールなしで比較できます。</p>
+      <div class="panel">
+        <p style="margin:0 0 0.5rem;font-weight:900;color:#9f1239;font-size:0.88rem">弱くなりやすい</p>
+        <div class="mini-flow">
+          <div class="mf-row"><span class="mf-box mf-bad">曖昧な入力</span><span class="mf-arr">→</span><span class="mf-box mf-neu">どうすれば？</span><span class="mf-arr">→</span><span class="mf-box mf-bad">結論っぽい出力<br /><small style="font-weight:700">ブレ大</small></span></div>
+        </div>
+        <p style="margin:0.85rem 0 0.5rem;font-weight:900;color:#047857;font-size:0.88rem">望ましい</p>
+        <div class="mini-flow">
+          <div class="mf-row"><span class="mf-box mf-ok">状況・目的<br /><small>＋質問依頼</small></span><span class="mf-arr">→</span><span class="mf-box mf-neu">質問ラリー</span><span class="mf-arr">→</span><span class="mf-box mf-ok">整理された案<br /><small style="font-weight:700">ブレ小さく</small></span></div>
+        </div>
+      </div>
+      <div class="card"><strong>要点：</strong>「教えて」より先に、状況の器を広げる設計にすると出力の質が上がりやすい。</div>
+    </section>
+
+    <section id="s2">
+      <div class="sec-head"><span class="sec-num">2</span><h2>代わりに最初に伝えること</h2></div>
+      <p>次の3つをセットで伝える。</p>
+      <ul>
+        <li><strong>今の状況</strong>（わかる範囲で事実ベース）</li>
+        <li><strong>目的</strong>（何を達成したいか）</li>
+        <li><strong>分からない</strong>ので、AIに<strong>質問して集め、十分なら案を出してほしい</strong></li>
+      </ul>
+      <p class="fig-cap">図3a. 最初の3点（セットで意味が成立）</p>
+      <div class="panel triad">
+        <div class="tri">① 状況（事実）<note>いま何が起きているか</note></div>
+        <div class="tri">② 目的（ゴール）<note>何を達成したいか</note></div>
+        <div class="tri">③ 「不足なら質問して」<note>AIへの明示的な依頼</note></div>
+      </div>
+      <div class="prompt">
+        <p class="lbl">コピペ用</p>
+        <p style="margin:0">「状況は〇〇、目的は△△です。自分では次に何をすべきか判断できないので、不足がなくなるまで私に質問してください。十分な情報が揃ったタイミングで、改善策・選択肢・リスクを整理してください。」</p>
+      </div>
+      <p class="fig-cap">図3b. 会話の型</p>
+      <div class="panel chat">
+        <div class="bubble bubble-you"><div class="lab">YOU</div>状況・目的＋「不足なら質問して」</div>
+        <div class="bubble bubble-ai"><div class="lab">AI</div>不足を埋める質問</div>
+        <div class="chat-pill">くり返し</div>
+        <div class="bubble bubble-you"><div class="lab">YOU</div>事実ベースで回答</div>
+        <div class="bubble bubble-ai"><div class="lab">AI</div>十分なら「案・リスク」を束ねて返す</div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="sec-head"><span class="sec-num">3</span><h2>次の課題にする・納得して実行するループ</h2></div>
+      <p>出たアウトプットを正解として採用せず<strong>次の課題</strong>にする。経験が浅いときは「どれを実行すべきか」が分からなくて当然なので、次のようにAIを使うと進みやすい。</p>
+      <ul>
+        <li><strong>なぜ効きそうか／理屈</strong>を説明させる</li>
+        <li><strong>危険・懸念</strong>を聞く</li>
+        <li><strong>関係者への説明文</strong>まで整え、承認を取りながら小さく試す</li>
+        <li>結果の<strong>解釈</strong>を次の入力にする</li>
+      </ul>
+      <div class="warn"><strong>留意：</strong>使わないから精度が上がるのではない。型を持てないと判断不能のまま回る。</div>
+      <p class="fig-cap">図4. アウトプットは「次の課題」</p>
+      <div class="panel vflow">
+        <div class="vstep" style="background:#fff;border:1px solid var(--line);color:var(--ink)"><span class="tag" style="color:var(--muted)">案</span>AIの提案（まだ採用しない）</div>
+        <div class="varr">↓</div>
+        <div class="vstep vstep--flow"><span class="tag">咀嚼</span>理屈・リスクを掘る（納得＝意味のある採用）</div>
+        <div class="varr">↓</div>
+        <div class="diamond">あなたが選ぶ</div>
+        <div class="varr">↓</div>
+        <div class="vstep" style="background:#fff;border:1px solid var(--line);color:var(--ink)"><span class="tag" style="color:var(--muted)">実行</span>小さく試す → 結果</div>
+        <div class="vloop">結果の解釈 → 図1の「入力」を更新</div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="sec-head"><span class="sec-num">4</span><h2>具体指示しすぎると起きること</h2></div>
+      <h3>ナビの比喩</h3>
+      <p>極端に細かい手順は、<strong>ショートカットや別解</strong>を潰しやすい。</p>
+      <h3>効く聞き方</h3>
+      <ul>
+        <li>「これで合っているか」</li>
+        <li>「もっと良い方法は」</li>
+        <li>「危険・懸念は」</li>
+      </ul>
+      <p class="fig-cap">図5. 道幅＝探索の余地</p>
+      <div class="compare-stack">
+        <div class="compare-panel cp-narrow">
+          <h4>狭い（手順ドット打ち）</h4>
+          指示が細かいほど、寄り道・別解が見えにくい。
+          <div class="viz-narrow"><div class="viz-narrow-inner" aria-hidden="true"></div></div>
+        </div>
+        <div class="compare-panel cp-wide">
+          <h4>広い（目的＋推敲）</h4>
+          ゴールと制約は渡し、手段の余地を残す。
+          <div class="viz-wide">別解のルートを残す</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="sec-head"><span class="sec-num">5</span><h2>医者と患者の比喩</h2></div>
+      <p>患者は<strong>観測できる事実</strong>を。診断の整理は相手（AI）側。</p>
+      <ul>
+        <li>結論の決めつけは入力を歪ませる</li>
+        <li>事実・制約を出し、質問に答えるほど精度が上がる</li>
+      </ul>
+      <p class="fig-cap">図6. 役割分担</p>
+      <div class="tile2">
+        <div class="tile tile-bad"><h4>弱い</h4>あなた：決めつけ → AI：その前提に引きずられる</div>
+        <div class="tile tile-ok"><h4>望ましい</h4>あなた：事実・制約 → AI：質問で補完→提案を束ねる</div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="sec-head"><span class="sec-num">6</span><h2>パラダイムと注意点</h2></div>
+      <div class="flow-list">
+        <div class="flow-row"><span class="flow-num">1</span><div>状況と目的を渡せば、筋の良い仮説を<strong>確率的に</strong>引き出しやすい。</div></div>
+        <div class="flow-row"><span class="flow-num">2</span><div>実行→分析を回す。任せ切りは<strong>思考力が育ちにくい</strong>。</div></div>
+        <div class="flow-row"><span class="flow-num">3</span><div><strong>仮説を持ちながら</strong>AIを動かす。</div></div>
+      </div>
+      <h3>人への依頼との共通</h3>
+      <p>細かく「こう作って」だけだと、その通りに寄りやすい。目的とヒアリング余地があると知性が残る。</p>
+      <p class="fig-cap">図7. 思考の所有権（目安）</p>
+      <div class="panel bal-stack">
+        <div class="bal-row">
+          <div class="bal-label">あなた（橙）</div>
+          <div class="bal-bar bal-you">仮説・優先・許容リスク</div>
+        </div>
+        <div class="bal-row">
+          <div class="bal-label">AI（青）</div>
+          <div class="bal-bar bal-ai">質問・整理・反例・文章化</div>
+        </div>
+        <p style="margin:0.5rem 0 0;font-size:0.84rem;color:var(--muted);font-weight:600">丸投げ＝「あなた」がゼロに近づく状態。説明責任が持てなくなる。</p>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="sec-head"><span class="sec-num">7</span><h2>責任は自分：AIは優秀な部下</h2></div>
+      <p>AIは責任を取らない。<strong>言われたからやる</strong>で終わらせない。</p>
+      <ul>
+        <li><strong>なぜその答えか</strong>を説明させ、反例も掘る</li>
+        <li>橋渡しだけになると、上司へ説明できない</li>
+      </ul>
+      <div class="card"><strong>心構え：</strong>優秀な<strong>部下</strong>として<strong>マネジメント</strong>する。</div>
+      <p class="fig-cap">図8. 責任の段</p>
+      <div class="panel pyramid">
+        <div class="pyr-top">あなた：意思決定・説明責任</div>
+        <div class="pyr-mid">AI：提案・根拠・反例</div>
+        <p class="pyr-note">橋渡しNG＝材料なく上へ投げること</p>
+      </div>
+      <div class="tile2">
+        <div class="tile tile-bad"><h4>弱い</h4>出力をそのまま転送</div>
+        <div class="tile tile-ok"><h4>強い</h4>論点を詰め、自分の言葉で説明できるまで戻す</div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="sec-head"><span class="sec-num">8</span><h2>ツールの一例</h2></div>
+      <p>動画＋チャット運用もアリ。発言メモでは <strong>Claude</strong> を軸にする余地、など（契約・環境で選択）。</p>
+    </section>
+
+    <footer>
+      <p><strong>PC版：</strong> <a href="index.html">index.html</a></p>
+      <p><strong>共有：</strong> <a href="https://kensukesugiyama-maker.github.io/ai-curriculum-html/">Pages トップ</a> ／ <a href="https://kensukesugiyama-maker.github.io/ai-curriculum-html/mobile.html">mobile.html 直リンク</a></p>
+      <p>出典：社内対話の要約・再構成。機密と社内ルールに注意。</p>
+    </footer>
+  </div>
+
+  <nav class="dock" aria-label="章へジャンプ">
+    <a href="#top">トップ</a>
+    <a href="#fig1">図1</a>
+    <a href="#s1">§1</a>
+    <a href="#s2">§2</a>
+    <a href="#s3">§3</a>
+    <a href="#s4">§4</a>
+    <a href="#s5">§5</a>
+    <a href="#s6">§6</a>
+    <a href="#s7">§7</a>
+    <a href="#s8">§8</a>
+    <a href="#toc-mob">目次</a>
+  </nav>
+</body>
+</html>
