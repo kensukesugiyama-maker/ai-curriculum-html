@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>わからないからできないをなくす — AIの使い方（学びのまとめ）</title>
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --border: #e5e2dc;
+      --card: #fff;
+      --warn: #b45309;
+      --warn-bg: #fffbeb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+    header {
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 {
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.35;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    nav.toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    nav.toc h2 {
+      margin: 0 0 0.75rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    nav.toc ol {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    nav.toc a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    nav.toc a:hover { text-decoration: underline; }
+    section {
+      margin-bottom: 2.75rem;
+    }
+    section h2 {
+      font-size: 1.15rem;
+      margin: 0 0 1rem;
+      padding-top: 0.5rem;
+      scroll-margin-top: 1rem;
+    }
+    section h3 {
+      font-size: 1rem;
+      margin: 1.5rem 0 0.5rem;
+      color: var(--text);
+    }
+    p { margin: 0 0 1rem; }
+    ul { margin: 0 0 1rem; padding-left: 1.35rem; }
+    li { margin-bottom: 0.35rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.35rem;
+      margin: 1rem 0;
+    }
+    .card strong { color: var(--text); }
+    .prompt-box {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+    }
+    .prompt-box p:last-child { margin-bottom: 0; }
+    .note {
+      background: var(--warn-bg);
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      font-size: 0.9rem;
+      color: #78350f;
+      margin: 1rem 0;
+    }
+    .note p:last-child { margin-bottom: 0; }
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .flow-step {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .flow-num {
+      flex-shrink: 0;
+      width: 1.75rem;
+      height: 1.75rem;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.15rem;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    code {
+      font-family: ui-monospace, monospace;
+      font-size: 0.88em;
+      background: #eee;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>わからないからできないをなくす<br />— AIの使い方（対話・マネジメントの考え方）</h1>
+      <p class="lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい「進め方」の設計図として使えます。</p>
+    </header>
+
+    <nav class="toc" aria-label="目次">
+      <h2>目次</h2>
+      <ol>
+        <li><a href="#why-bad-first">最初に「どうすればいい？」と聞くと弱くなる理由</a></li>
+        <li><a href="#better-start">代わりに最初に伝えること</a></li>
+        <li><a href="#loop">次の課題にする・納得して実行するループ</a></li>
+        <li><a href="#over-spec">具体指示しすぎると起きること（ナビ・アウトソースの比喩）</a></li>
+        <li><a href="#doctor">医者と患者の比喩（偏見・決めつけをしない）</a></li>
+        <li><a href="#paradigm">パラダイム：状況と目的を渡せば仮説は出せる／注意点</a></li>
+        <li><a href="#responsibility">責任は自分：AIは優秀な部下、橋渡しで終わらない</a></li>
+        <li><a href="#tools">ツールの一例</a></li>
+      </ol>
+    </nav>
+
+    <section id="why-bad-first">
+      <h2>1. 最初に「どうすればいい？」と聞くと弱くなる理由</h2>
+      <p>情報が足りないままAIに結論を求めると、AIは足りない前提のまま考え始めます。その結果、アウトプットの当たり外れが大きくなりやすい。</p>
+      <div class="card">
+        <p><strong>要点：</strong>「教えて」より先に、状況の器を広げる（情報を増やす）設計にすると、出力の質が上がりやすい。</p>
+      </div>
+    </section>
+
+    <section id="better-start">
+      <h2>2. 代わりに最初に伝えること</h2>
+      <p>次の3つをセットで伝える。</p>
+      <ul>
+        <li><strong>今の状況</strong>（わかる範囲で事実ベース）</li>
+        <li><strong>目的</strong>（何を達成したいか）</li>
+        <li><strong>自分は何をすべきか分からない</strong>ので、AIに<strong>自分へ質問して情報を集め、十分なら改善策や選択肢を出してほしい</strong></li>
+      </ul>
+      <div class="prompt-box">
+        <p><strong>例（意図の伝え方）</strong></p>
+        <p>「状況は〇〇、目的は△△です。自分では次に何をすべきか判断できないので、不足がなくなるまで私に質問してください。十分な情報が揃ったタイミングで、改善策・選択肢・リスクを整理してください。」</p>
+      </div>
+      <p>こうすると質問のラリーで情報が溜まり、最初から結論を急がない分、出力が安定しやすい。</p>
+    </section>
+
+    <section id="loop">
+      <h2>3. 次の課題にする・納得して実行するループ</h2>
+      <p>出たアウトプットを、そのまま正解として採用せず<strong>次の課題</strong>にする。経験が浅いときは「どれを実行すべきか」が分からなくて当然なので、次のようにAIを使うと進みやすい。</p>
+      <ul>
+        <li>各案について、<strong>なぜ効きそうか／理屈</strong>を説明させる</li>
+        <li><strong>危険・懸念・失敗パターン</strong>を聞く</li>
+        <li>必要なら<strong>関係者への説明文</strong>まで整え、承認を取りながら小さく試す</li>
+        <li>結果が出たら、<strong>結果の解釈</strong>も含めて次の入力にする</li>
+      </ul>
+      <div class="note">
+        <p><strong>留意：</strong>AIを使わないから仮説精度が上がる、ではない。使い方を意識しないと、判断不能のまま回り続けやすい。だからこそ、状況→質問→納得→実行→検証、の型を持つ。</p>
+      </div>
+    </section>
+
+    <section id="over-spec">
+      <h2>4. 具体指示しすぎると起きること</h2>
+      <h3>ターンバイターンのナビの比喩</h3>
+      <p>道順を極端に細かく指定すると、相手（実行側）はその通りに動きやすくなり、<strong>ショートカットや別解</strong>を見つける余地が減る。AIへの指示も同様で、「細かすぎる手順の丸投げ」は発想の幅を狭めることがある。</p>
+      <h3>一方で効く聞き方</h3>
+      <p>自分の案を持ったうえで、次を聞くと良い。</p>
+      <ul>
+        <li>「これで合っているか」</li>
+        <li>「こう改善したら良さそうだと思うが、もっと良い方法は」</li>
+        <li>「このやり方の危険・懸念は何か」</li>
+      </ul>
+      <p>最初から<strong>状況・目的・「質問してから提案して」</strong>とセットにすると、AIが狭い世界の中だけで独りPDCAする状況を避けやすい。</p>
+    </section>
+
+    <section id="doctor">
+      <h2>5. 医者と患者の比喩</h2>
+      <p>患者がやるのは、決めつけた病名の主張より、<strong>観測できる症状・経過の報告</strong>。診断は、情報を聞いた側（医者／AI側）が整理する。</p>
+      <ul>
+        <li>「これは絶対〇〇だ」と結論を先に言うと、報告の質が落ち、入力が歪み、アウトプットもズレやすい</li>
+        <li>事実・違和感・期限・制約を出し、質問に答える。これが精度を上げる</li>
+      </ul>
+    </section>
+
+    <section id="paradigm">
+      <h2>6. パラダイムと注意点</h2>
+      <div class="flow">
+        <div class="flow-step">
+          <span class="flow-num">1</span>
+          <div><strong>無知だからできない</strong>、だけを理由に止まりにくくなる。状況と目的を渡せば、そこそこ筋の良い仮説を<strong>確率的に</strong>引き出しやすい。</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">2</span>
+          <div>その後は<strong>実行→結果の分析</strong>を回す。分析もAIに渡せるが、常に任せ切りだと<strong>自分の思考力が育ちにくい</strong>。</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">3</span>
+          <div>よいバランスは、<strong>自分なりの仮説を持ちながら</strong>AIを動かすこと。</div>
+        </div>
+      </div>
+      <h3>人への依頼・デザインとの共通項</h3>
+      <p>「こう作って」と細かく指示すると、その通りになりやすい。目的を伝え、必要ならヒアリングしてほしいと言うと、残りの知性が解放されやすい（相手の能力次第では具体化が必要な場合もある）。</p>
+    </section>
+
+    <section id="responsibility">
+      <h2>7. 責任は自分：AIは優秀な部下</h2>
+      <p>AIは責任を取らない。だから<strong>「言われたからやる」では終わらない</strong>。部下が提案してきたときと同じで、納得したうえで意思決定する。</p>
+      <ul>
+        <li><strong>なぜその答えか</strong>をAIに説明させ、角のケースや反例も掘る</li>
+        <li>ラリーをせず持って帰るだけだと、自分が上司に説明できず、ただの橋渡しになる（マネジメントの甘さと同型）</li>
+      </ul>
+      <div class="card">
+        <p><strong>心構え：</strong>優秀な道具が増えたのではなく、<strong>優秀な部下がいるので、自分は上司としてマネジメントする</strong>、と捉えるとブレにくい。</p>
+      </div>
+    </section>
+
+    <section id="tools">
+      <h2>8. ツールの一例（発言メモ）</h2>
+      <p>活字を読む習慣がない人でも、動画は見つつ、基本はチャットで試す、という運用もアリ。発言では <strong>Claude</strong> を軸に据える余地がある、との整理があった（環境や契約に合わせて選択する）。</p>
+    </section>
+
+    <footer>
+      <p>出典：社内対話の文字起こしを要約・再構成。実務では機密情報の取り扱いと組織ルールに従ってください。</p>
+    </footer>
+  </div>
+</body>
+</html>
