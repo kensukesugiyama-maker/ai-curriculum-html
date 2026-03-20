@@ -6,41 +6,58 @@
   <title>わからないからできないをなくす — AIの使い方（学びのまとめ）</title>
   <style>
     :root {
-      --bg: #f8f7f4;
-      --text: #1a1a1a;
-      --muted: #5c5c5c;
+      --bg: #f0f4f8;
+      --text: #0f172a;
+      --muted: #64748b;
       --accent: #2563eb;
-      --accent-soft: #dbeafe;
-      --border: #e5e2dc;
-      --card: #fff;
+      --accent-2: #4f46e5;
+      --accent-soft: #e0e7ff;
+      --border: #cbd5e1;
+      --card: #ffffff;
       --warn: #b45309;
       --warn-bg: #fffbeb;
+      --viz-ok: #059669;
+      --viz-ok-bg: #ecfdf5;
+      --viz-ng: #e11d48;
+      --viz-ng-bg: #fff1f2;
+      --viz-ai: #1d4ed8;
+      --viz-ai-bg: #eff6ff;
+      --viz-you: #475569;
+      --viz-you-bg: #f1f5f9;
+      --radius: 14px;
+      --shadow: 0 10px 40px -12px rgba(15, 23, 42, 0.18);
+      --shadow-sm: 0 4px 14px -4px rgba(15, 23, 42, 0.12);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
       font-size: 1rem;
       line-height: 1.75;
       color: var(--text);
       background: var(--bg);
+      background-image: radial-gradient(ellipse 120% 80% at 50% -20%, #e0e7ff 0%, transparent 55%);
     }
     .wrap {
-      max-width: 42rem;
+      max-width: 44rem;
       margin: 0 auto;
       padding: 2.5rem 1.25rem 4rem;
     }
     header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       padding-bottom: 1.5rem;
       border-bottom: 1px solid var(--border);
     }
     h1 {
-      font-size: clamp(1.35rem, 4vw, 1.75rem);
-      font-weight: 700;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      font-weight: 800;
       line-height: 1.35;
       margin: 0 0 0.75rem;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      background: linear-gradient(120deg, var(--text) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
     .lead {
       margin: 0;
@@ -50,9 +67,10 @@
     nav.toc {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius);
       padding: 1.25rem 1.5rem;
       margin-bottom: 2.5rem;
+      box-shadow: var(--shadow-sm);
     }
     nav.toc h2 {
       margin: 0 0 0.75rem;
@@ -60,30 +78,24 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
     }
-    nav.toc ol {
-      margin: 0;
-      padding-left: 1.25rem;
-    }
-    nav.toc a {
-      color: var(--accent);
-      text-decoration: none;
-    }
+    nav.toc ol { margin: 0; padding-left: 1.25rem; }
+    nav.toc a { color: var(--accent); text-decoration: none; font-weight: 600; }
     nav.toc a:hover { text-decoration: underline; }
-    section {
-      margin-bottom: 2.75rem;
-    }
+    section { margin-bottom: 2.75rem; }
     section h2 {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       margin: 0 0 1rem;
       padding-top: 0.5rem;
       scroll-margin-top: 1rem;
+      font-weight: 800;
     }
     section h3 {
-      font-size: 1rem;
+      font-size: 1.02rem;
       margin: 1.5rem 0 0.5rem;
       color: var(--text);
+      font-weight: 700;
     }
     p { margin: 0 0 1rem; }
     ul { margin: 0 0 1rem; padding-left: 1.35rem; }
@@ -91,36 +103,33 @@
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius);
       padding: 1.25rem 1.35rem;
       margin: 1rem 0;
+      box-shadow: var(--shadow-sm);
     }
     .card strong { color: var(--text); }
     .prompt-box {
-      background: var(--accent-soft);
-      border-left: 4px solid var(--accent);
-      padding: 1rem 1.25rem;
+      background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+      border: 1px solid #c7d2fe;
+      padding: 1.1rem 1.25rem;
       margin: 1rem 0;
-      border-radius: 0 8px 8px 0;
+      border-radius: var(--radius);
       font-size: 0.92rem;
+      box-shadow: var(--shadow-sm);
     }
     .prompt-box p:last-child { margin-bottom: 0; }
     .note {
       background: var(--warn-bg);
       border: 1px solid #fcd34d;
-      border-radius: 8px;
+      border-radius: var(--radius);
       padding: 1rem 1.15rem;
       font-size: 0.9rem;
       color: #78350f;
-      margin: 1rem 0;
+ margin: 1rem 0;
     }
     .note p:last-child { margin-bottom: 0; }
-    .flow {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin: 1rem 0;
-    }
+    .flow { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
     .flow-step {
       display: flex;
       gap: 0.75rem;
@@ -130,11 +139,11 @@
       flex-shrink: 0;
       width: 1.75rem;
       height: 1.75rem;
-      background: var(--text);
-      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
       border-radius: 50%;
       font-size: 0.75rem;
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -150,34 +159,390 @@
     code {
       font-family: ui-monospace, monospace;
       font-size: 0.88em;
-      background: #eee;
+      background: #e2e8f0;
       padding: 0.1em 0.35em;
       border-radius: 4px;
     }
-    /* 図表 */
-    figure.diagram {
-      margin: 1.25rem 0;
+
+    /* —— ビジュアル共通 —— */
+    figure.viz {
+      margin: 1.5rem 0;
       padding: 0;
     }
-    figure.diagram figcaption {
-      font-size: 0.85rem;
+    figure.viz figcaption {
+      font-size: 0.9rem;
       color: var(--muted);
-      margin: 0 0 0.5rem;
-      font-weight: 600;
+      margin: 0 0 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
     }
-    .diagram-inner {
+    figure.viz figcaption::before {
+      content: "";
+      width: 4px;
+      height: 1.1em;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    }
+    .viz-surface {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 0.75rem;
+      border-radius: var(--radius);
+      padding: 1.35rem 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    /* 横スクロール型ステップ（全体像） */
+    .viz-pipeline-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      margin: 0 -0.25rem;
+      padding-bottom: 0.25rem;
     }
-    .diagram-inner .mermaid {
+    .viz-pipeline {
       display: flex;
-      justify-content: center;
-      min-height: 80px;
+      align-items: stretch;
+      gap: 0;
+      min-width: min(100%, 38rem);
     }
+    .viz-pipe-card {
+      flex: 1;
+      min-width: 7.5rem;
+      background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 0.65rem;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .viz-pipe-card .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      margin-bottom: 0.45rem;
+    }
+    .viz-pipe-card .lbl {
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .viz-pipe-card .sub {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .viz-pipe-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 0.15rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      font-weight: 300;
+      user-select: none;
+    }
+    .viz-pipe-loop-note {
+      margin-top: 0.85rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .viz-pipe-loop-note span {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: var(--accent-soft);
+      color: #3730a3;
+      border-radius: 999px;
+    }
+
+    /* 縦タイムライン（悪い流れ・単純フロー） */
+    .viz-timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    .viz-timeline li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.85rem 1rem;
+      padding-bottom: 1.15rem;
+      position: relative;
+    }
+    .viz-timeline li:last-child { padding-bottom: 0; }
+    .viz-timeline li::before {
+      content: "";
+      grid-row: 1 / -1;
+      grid-column: 1;
+      width: 3px;
+      margin-left: 0.72rem;
+      background: linear-gradient(180deg, var(--line-top, #cbd5e1), var(--line-bot, #94a3b8));
+      border-radius: 2px;
+      margin-top: 0.15rem;
+      height: calc(100% + 0.25rem);
+      align-self: start;
+    }
+    .viz-timeline li:last-child::before { height: 100%; }
+    .viz-timeline .dot {
+      grid-column: 1;
+      grid-row: 1;
+      width: 1.55rem;
+      height: 1.55rem;
+      border-radius: 50%;
+      background: var(--dot-bg, #64748b);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 1px var(--border);
+      z-index: 1;
+      justify-self: center;
+      align-self: start;
+      margin-top: 0.05rem;
+    }
+    .viz-timeline .box {
+      grid-column: 2;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+    .viz-timeline.warn {
+      --line-top: #fda4af;
+      --line-bot: #fb7185;
+      --dot-bg: #f43f5e;
+    }
+    .viz-timeline.warn .box {
+      background: #fff1f2;
+      border-color: #fecdd3;
+      color: #9f1239;
+    }
+
+    /* チャット風 */
+    .viz-chat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .viz-msg {
+      max-width: 92%;
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.55;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .viz-msg .who {
+      display: block;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+      opacity: 0.85;
+    }
+    .viz-msg--you {
+      align-self: flex-end;
+      background: var(--viz-you-bg);
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      border-bottom-right-radius: 4px;
+    }
+    .viz-msg--ai {
+      align-self: flex-start;
+      background: var(--viz-ai-bg);
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      border-bottom-left-radius: 4px;
+    }
+    .viz-chat-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.75rem;
+      margin: 0.15rem 0;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #6d28d9;
+      background: #f5f3ff;
+      border: 1px dashed #c4b5fd;
+      border-radius: 999px;
+      align-self: center;
+    }
+
+    /* ループ SVG */
+    .viz-svg-wrap {
+      width: 100%;
+      overflow: hidden;
+    }
+    .viz-svg-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .viz-sq {
+      fill: #fff;
+      stroke: var(--border);
+      stroke-width: 1.5;
+    }
+    .viz-sq-light { fill: #f8fafc; }
+    .viz-arrow-line {
+      fill: none;
+      stroke: #94a3b8;
+      stroke-width: 2;
+      marker-end: url(#m-end);
+    }
+    .viz-arrow-loop {
+      fill: none;
+      stroke: url(#g-arrow);
+      stroke-width: 2.5;
+      marker-end: url(#m-end2);
+    }
+    .viz-lbl { font-size: 11px; font-weight: 700; fill: var(--text); }
+    .viz-lbl-sm { font-size: 10px; fill: var(--muted); font-weight: 600; }
+
+    /* 2カラム比較（地図・役割） */
+    .viz-duo {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 560px) {
+      .viz-duo { grid-template-columns: 1fr 1fr; }
+    }
+    .viz-panel {
+      border-radius: var(--radius);
+      padding: 1.15rem 1.2rem;
+      border: 1px solid var(--border);
+      position: relative;
+ overflow: hidden;
+    }
+    .viz-panel[data-icon]::before {
+      content: attr(data-icon);
+      position: absolute;
+      top: 0.65rem;
+      right: 0.85rem;
+      font-size: 1.25rem;
+      opacity: 0.45;
+      font-weight: 800;
+    }
+    .viz-panel--narrow {
+      background: linear-gradient(165deg, #fff1f2 0%, #ffe4e6 100%);
+      border-color: #fda4af;
+    }
+    .viz-panel--wide {
+      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #6ee7b7;
+    }
+    .viz-panel--bad {
+      background: linear-gradient(165deg, #fff1f2 0%, #ffe4e6 100%);
+      border-color: #fda4af;
+    }
+    .viz-panel--ok {
+      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 100%);
+      border-color: #6ee7b7;
+    }
+    .viz-panel h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .viz-panel p { margin: 0; font-size: 0.88rem; font-weight: 600; line-height: 1.6; color: #334155; }
+    .viz-mini-steps {
+      margin-top: 0.65rem;
+      padding-left: 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.55;
+    }
+
+    /* 上司×部下 */
+    .viz-mgmt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.5rem 0;
+    }
+    .viz-avatar-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 28rem;
+    }
+    .viz-person {
+      flex: 1;
+      min-width: 8.5rem;
+      text-align: center;
+      padding: 1rem 0.75rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .viz-person .icon {
+      width: 2.5rem;
+      height: 2.5rem;
+ margin: 0 auto 0.45rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+    .viz-person--boss .icon {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+    }
+    .viz-person--staff .icon {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    }
+    .viz-person .role {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .viz-person .name {
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-top: 0.15rem;
+      color: var(--text);
+    }
+    .viz-bidir {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent);
+      padding: 0.35rem 0.65rem;
+      background: var(--accent-soft);
+      border-radius: 999px;
+    }
+
+    /* レガシー compare（§1互換） */
     .compare {
       display: grid;
       grid-template-columns: 1fr;
@@ -188,49 +553,49 @@
       .compare { grid-template-columns: 1fr 1fr; }
     }
     .compare-box {
-      border-radius: 10px;
+      border-radius: var(--radius);
       padding: 1rem 1.1rem;
       border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
     .compare-box h4 {
       margin: 0 0 0.6rem;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
-    .compare-box.bad {
-      background: #fef2f2;
-      border-color: #fecaca;
-    }
+    .compare-box.bad { background: var(--compare-bad-bg, #fff1f2); border-color: #fecaca; }
     .compare-box.bad h4 { color: #991b1b; }
-    .compare-box.good {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
-    }
+    .compare-box.good { background: #ecfdf5; border-color: #bbf7d0; }
     .compare-box.good h4 { color: #166534; }
     .compare-box p:last-child { margin-bottom: 0; }
+
     .overview-strip {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.35rem 0.5rem;
+      gap: 0.4rem 0.55rem;
       margin: 1.25rem 0 0;
       padding: 1rem 1.1rem;
       background: var(--card);
-      border: 1px dashed var(--border);
-      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       font-size: 0.88rem;
       line-height: 1.55;
+      box-shadow: var(--shadow-sm);
     }
     .overview-strip .step-pill {
-      background: var(--accent-soft);
-      color: #1e3a8a;
-      padding: 0.2rem 0.55rem;
+      background: linear-gradient(135deg, #e0e7ff, #dbeafe);
+      color: #312e81;
+      padding: 0.28rem 0.65rem;
       border-radius: 999px;
-      font-weight: 600;
+      font-weight: 800;
+      font-size: 0.78rem;
       white-space: nowrap;
+      border: 1px solid #c7d2fe;
     }
-    .overview-strip .arrow { color: var(--muted); user-select: none; }
+    .overview-strip .arrow { color: var(--muted); user-select: none; font-weight: 300; }
   </style>
 </head>
 <body>
@@ -246,17 +611,43 @@
       </p>
     </header>
 
-    <figure class="diagram" id="fig-overview">
+    <figure class="viz" id="fig-overview">
       <figcaption>全体像：情報を先に揃えてから動く</figcaption>
-      <div class="diagram-inner">
-        <pre class="mermaid">
-flowchart LR
-  A["状況・目的を伝える"] --> B["AIに『自分へ質問』を依頼"]
-  B --> C["質問のラリーで情報が増える"]
-  C --> D["改善策・選択肢・リスク"]
-  D --> E["納得・実行・検証"]
-  E --> A
-        </pre>
+      <div class="viz-surface">
+        <div class="viz-pipeline-wrap">
+          <div class="viz-pipeline" role="list">
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">1</span>
+              <span class="lbl">状況・目的</span>
+              <span class="sub">事実とゴールを渡す</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">2</span>
+              <span class="lbl">質問を依頼</span>
+              <span class="sub">「足りなければ聞いて」</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">3</span>
+              <span class="lbl">ラリーで情報増</span>
+              <span class="sub">質問→回答の反復</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">4</span>
+              <span class="lbl">提案が出る</span>
+              <span class="sub">案・リスク整理</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">5</span>
+              <span class="lbl">納得→実行</span>
+              <span class="sub">小さく試して検証</span>
+            </div>
+          </div>
+        </div>
+        <p class="viz-pipe-loop-note"><span>検証結果を「次の状況」として 1 に戻す</span></p>
       </div>
     </figure>
 
@@ -288,14 +679,14 @@ flowchart LR
           <p>状況・目的を伝えたうえで、「足りないなら質問して」と明示する → 入力の器が広がる。</p>
         </div>
       </div>
-      <figure class="diagram">
-        <figcaption>情報不足のまま結論を急ぐと起きること</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart TD
-  A["入力の情報が少ない"] --> B["AIは不足した前提のまま補完"]
-  B --> C["当たり外れの大きい結論になりやすい"]
-          </pre>
+      <figure class="viz">
+        <figcaption>情報不足のまま結論を急ぐと起きること（下に進むほど危うい）</figcaption>
+        <div class="viz-surface">
+          <ul class="viz-timeline warn">
+            <li><span class="dot"></span><div class="box">入力の情報が少ない</div></li>
+            <li><span class="dot"></span><div class="box">AIは「ない前提」を勝手に補完して考え始める</div></li>
+            <li><span class="dot"></span><div class="box">結論の当たり外れが大きくなりやすい</div></li>
+          </ul>
         </div>
       </figure>
       <div class="card">
@@ -316,20 +707,24 @@ flowchart TD
         <p>「状況は〇〇、目的は△△です。自分では次に何をすべきか判断できないので、不足がなくなるまで私に質問してください。十分な情報が揃ったタイミングで、改善策・選択肢・リスクを整理してください。」</p>
       </div>
       <p>こうすると質問のラリーで情報が溜まり、最初から結論を急がない分、出力が安定しやすい。</p>
-      <figure class="diagram">
-        <figcaption>「AIに質問させる」ときの会話の型</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-sequenceDiagram
-  participant U as あなた
-  participant A as AI
-  U->>A: 状況・目的＋「分からないので質問して」
-  loop 情報が足りない間
-    A->>U: 質問
-    U->>A: 回答（事実ベース）
-  end
-  A->>U: 改善策・選択肢・リスクの整理
-          </pre>
+      <figure class="viz">
+        <figcaption>会話の型（チャットのイメージ）</figcaption>
+        <div class="viz-surface">
+          <div class="viz-chat">
+            <div class="viz-msg viz-msg--you">
+              <span class="who">You</span>
+              状況・目的を渡す。「分からないので、不足があれば質問して」と添える。
+            </div>
+            <div class="viz-msg viz-msg--ai">
+              <span class="who">AI</span>
+              不足を埋めるための質問（1問ずつでもまとめてでもOK）。
+            </div>
+            <div class="viz-chat-loop" aria-label="繰り返し">質問 ⇄ 回答（事実ベース）をくり返す</div>
+            <div class="viz-msg viz-msg--ai">
+              <span class="who">AI</span>
+              情報が揃ったら、改善策・選択肢・リスクを整理して提案。
+            </div>
+          </div>
         </div>
       </figure>
     </section>
@@ -346,17 +741,46 @@ sequenceDiagram
       <div class="note">
         <p><strong>留意：</strong>AIを使わないから仮説精度が上がる、ではない。使い方を意識しないと、判断不能のまま回り続けやすい。だからこそ、状況→質問→納得→実行→検証、の型を持つ。</p>
       </div>
-      <figure class="diagram">
-        <figcaption>実行までのループ（アウトプットは「次の課題」扱い）</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart LR
-  O["AIの提案"] --> K["理屈・リスクを掘って納得"]
-  K --> X["小さく実行"]
-  X --> R["結果と解釈"]
-  R --> N["次の状況・目的として入力"]
-  N --> O
-          </pre>
+      <figure class="viz">
+        <figcaption>実行までのループ（1周すると次のテーマに強くなる）</figcaption>
+        <div class="viz-surface">
+          <div class="viz-svg-wrap">
+            <svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="g-arrow" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#6366f1" />
+                  <stop offset="100%" style="stop-color:#2563eb" />
+                </linearGradient>
+                <marker id="m-end" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8" />
+                </marker>
+                <marker id="m-end2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                  <path d="M0,0 L9,4.5 L0,9 Z" fill="#6366f1" />
+                </marker>
+              </defs>
+              <rect class="viz-sq" x="170" y="20" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="44" text-anchor="middle">AIの提案</text>
+              <text class="viz-lbl-sm" x="240" y="58" text-anchor="middle">まだ「正解」と決めない</text>
+              <path class="viz-arrow-line" d="M 240 72 L 240 88" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="92" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="116" text-anchor="middle">理屈・リスク</text>
+              <text class="viz-lbl-sm" x="240" y="130" text-anchor="middle">納得できるまで掘る</text>
+              <path class="viz-arrow-line" d="M 240 144 L 240 160" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="164" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="188" text-anchor="middle">小さく実行</text>
+              <text class="viz-lbl-sm" x="240" y="202" text-anchor="middle">承認・スコープを守る</text>
+              <path class="viz-arrow-line" d="M 240 216 L 240 232" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="236" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="260" text-anchor="middle">結果と解釈</text>
+              <text class="viz-lbl-sm" x="240" y="274" text-anchor="middle">次の「状況・目的」へ</text>
+
+              <path class="viz-arrow-loop" d="M 310 260 C 420 260 430 50 310 46" fill="none" />
+              <text class="viz-lbl-sm" x="395" y="155" text-anchor="middle" fill="#6366f1" font-weight="800">次へ</text>
+            </svg>
+          </div>
         </div>
       </figure>
     </section>
@@ -373,19 +797,27 @@ flowchart LR
         <li>「このやり方の危険・懸念は何か」</li>
       </ul>
       <p>最初から<strong>状況・目的・「質問してから提案して」</strong>とセットにすると、AIが狭い世界の中だけで独りPDCAする状況を避けやすい。</p>
-      <figure class="diagram">
-        <figcaption>ナビの比喩：細かく指定すると「到達の仕方」が固定される</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart TB
-  subgraph S["手順を細かく指定しすぎ"]
-    A["指示の幅"] --> B["実行側の探索余地が減る"]
-    B --> C["ショートカット・別解が見えにくい"]
-  end
-  subgraph W["自分の案＋合ってる？／危険は？"]
-    D["目的と拘束は伝える"] --> E["AIの幅を残したまま推敲できる"]
-  end
-          </pre>
+      <figure class="viz">
+        <figcaption>比べてみる：道幅＝発想の幅</figcaption>
+        <div class="viz-duo">
+          <div class="viz-panel viz-panel--narrow">
+            <h4>手順ドット打ち</h4>
+            <p>細かい指示は「安全」に見えるが、探索の余地が狭まる。</p>
+            <div class="viz-mini-steps">
+              ・一歩ごとに指定<br />
+              ・寄り道しにくい<br />
+              ・ショートカットに気づきにくい
+            </div>
+          </div>
+          <div class="viz-panel viz-panel--wide">
+            <h4>目的＋自分の案＋推敲</h4>
+            <p>ゴールと制約は渡しつつ、改善・危険・別解の余地を残す。</p>
+            <div class="viz-mini-steps">
+              ・目的は固定、手段は柔らかく<br />
+              ・「合ってる？」「危険は？」で広がる<br />
+              ・質問フローとも相性がいい
+            </div>
+          </div>
         </div>
       </figure>
     </section>
@@ -397,18 +829,19 @@ flowchart TB
         <li>「これは絶対〇〇だ」と結論を先に言うと、報告の質が落ち、入力が歪み、アウトプットもズレやすい</li>
         <li>事実・違和感・期限・制約を出し、質問に答える。これが精度を上げる</li>
       </ul>
-      <figure class="diagram">
-        <figcaption>医者と患者：役割を混ぜない</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart LR
-  subgraph NG["入力が弱くなりやすい"]
-    n1["決めつけの結論"] --> n2["事実の報告が歪む"] --> n3["出力もズレる"]
-  end
-  subgraph OK["望ましい"]
-    o1["観測できる事実・制約"] --> o2["AI/医者が質問"] --> o3["整理された提案"]
-  end
-          </pre>
+      <figure class="viz">
+        <figcaption>入力の型：決めつけないほうが、出力がブレにくい</figcaption>
+        <div class="viz-duo">
+          <div class="viz-panel viz-panel--bad" data-icon="✗">
+            <h4>弱くなりやすい</h4>
+            <p>結論を先に言う（自己診断を押しつける）。事実より主張が目立つ。</p>
+            <div class="viz-mini-steps">決めつけ → 情報が歪む → 提案もズレる</div>
+          </div>
+          <div class="viz-panel viz-panel--ok" data-icon="✓">
+            <h4>望ましい</h4>
+            <p>観測できる事実・制約を出す。相手（AI）が質問して整理する。</p>
+            <div class="viz-mini-steps">事実 → 質問で補完 → 筋の良い提案</div>
+          </div>
         </div>
       </figure>
     </section>
@@ -431,14 +864,25 @@ flowchart LR
       </div>
       <h3>人への依頼・デザインとの共通項</h3>
       <p>「こう作って」と細かく指示すると、その通りになりやすい。目的を伝え、必要ならヒアリングしてほしいと言うと、残りの知性が解放されやすい（相手の能力次第では具体化が必要な場合もある）。</p>
-      <figure class="diagram">
-        <figcaption>バランス：仮説は自分／調査と文章化はAI、が壊れにくい</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart TB
-  H["自分: 仮説・優先順位・リスク許容"] --> M["AI: 質問・整理・反例・文章案"]
-  M --> H
-          </pre>
+      <figure class="viz">
+        <figcaption>役割分担：往復させるとブレにくい</figcaption>
+        <div class="viz-surface">
+          <div class="viz-mgmt">
+            <div class="viz-avatar-row">
+              <div class="viz-person viz-person--boss">
+                <div class="icon" aria-hidden="true">人</div>
+                <div class="role">You</div>
+                <div class="name">仮説・優先順位<br />リスク許容</div>
+              </div>
+              <div class="viz-bidir" aria-hidden="true">⇄</div>
+              <div class="viz-person viz-person--staff">
+                <div class="icon" aria-hidden="true">AI</div>
+                <div class="role">Partner</div>
+                <div class="name">質問・整理<br />反例・文章案</div>
+              </div>
+            </div>
+            <p style="margin:0.25rem 0 0;font-size:0.82rem;color:var(--muted);font-weight:600;text-align:center;">一方向に流しっぱなしにせず、ツッコミと優先づけを返す</p>
+          </div>
         </div>
       </figure>
     </section>
@@ -453,17 +897,25 @@ flowchart TB
       <div class="card">
         <p><strong>心構え：</strong>優秀な道具が増えたのではなく、<strong>優秀な部下がいるので、自分は上司としてマネジメントする</strong>、と捉えるとブレにくい。</p>
       </div>
-      <figure class="diagram">
+      <figure class="viz">
         <figcaption>関係性：橋渡しで終わらせない</figcaption>
-        <div class="diagram-inner">
-          <pre class="mermaid">
-flowchart TB
-  Boss["あなた（上司）: 意思決定・説明責任"]
-  Staff["AI（部下）: 提案・根拠・反例の補足"]
-  Staff -->|"根拠・文章案"| Boss
-  Boss -->|"納得まで質問・優先"| Staff
-  Boss --> Done["実行と検証"]
-          </pre>
+        <div class="viz-surface">
+          <div class="viz-mgmt">
+            <div class="viz-avatar-row" style="max-width: 22rem;">
+              <div class="viz-person viz-person--boss">
+                <div class="icon" aria-hidden="true">指</div>
+                <div class="role">上司（あなた）</div>
+                <div class="name">意思決定<br />説明責任</div>
+              </div>
+              <div class="viz-bidir">根拠⇄質問</div>
+              <div class="viz-person viz-person--staff">
+                <div class="icon" aria-hidden="true">僚</div>
+                <div class="role">部下（AI）</div>
+                <div class="name">提案・根拠<br />反例の補足</div>
+              </div>
+            </div>
+            <p style="margin:0.6rem 0 0;font-size:0.88rem;font-weight:700;text-align:center;color:var(--accent);">納得 → 実行と検証（責任は常にこちら）</p>
+          </div>
         </div>
       </figure>
       <div class="compare">
@@ -489,25 +941,5 @@ flowchart TB
       <p>出典：社内対話の文字起こしを要約・再構成。実務では機密情報の取り扱いと組織ルールに従ってください。</p>
     </footer>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: "base",
-      securityLevel: "loose",
-      fontFamily: '"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif',
-      themeVariables: {
-        primaryColor: "#dbeafe",
-        primaryTextColor: "#1a1a1a",
-        primaryBorderColor: "#93c5fd",
-        lineColor: "#64748b",
-        secondaryColor: "#f1f5f9",
-        tertiaryColor: "#f8fafc"
-      },
-      flowchart: { htmlLabels: true, curve: "basis", padding: 10 },
-      sequence: { actorMargin: 50, boxMargin: 10 }
-    });
-  </script>
 </body>
 </html>
