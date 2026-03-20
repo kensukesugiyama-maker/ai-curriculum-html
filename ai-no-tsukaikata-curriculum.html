@@ -3,38 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light" />
-  <meta name="theme-color" content="#f4f6f8" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#070a12" />
   <title>わからないからできないをなくす — AIの使い方（学びのまとめ）</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper: #f4f6f8;
-      --card: #ffffff;
-      --ink: #0f172a;
-      --body: #334155;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --accent: #1d4ed8;
-      --accent-soft: #eff6ff;
-      --ok: #047857;
-      --ok-bg: #d1fae5;
-      --ok-border: #6ee7b7;
-      --bad: #be123c;
-      --bad-bg: #ffe4e6;
-      --bad-border: #fda4af;
-      --warn: #b45309;
-      --warn-bg: #fffbeb;
-      --warn-border: #fcd34d;
-      --neutral: #475569;
-      --neutral-bg: #f1f5f9;
-      --radius: 14px;
+      --bg0: #070a12;
+      --bg1: #0d1324;
+      --surface: rgba(255, 255, 255, 0.045);
+      --surface2: rgba(255, 255, 255, 0.075);
+      --border: rgba(255, 255, 255, 0.1);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --cyan: #22d3ee;
+      --cyan-dim: rgba(34, 211, 238, 0.2);
+      --violet: #a78bfa;
+      --violet-dim: rgba(167, 139, 250, 0.2);
+      --rose: #fb7185;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 24px 80px -32px rgba(0, 0, 0, 0.65);
       --font: "Noto Sans JP", system-ui, sans-serif;
-      --max-text: 40rem;
-      --max-fig: 44rem;
-      --shadow: 0 12px 40px -24px rgba(15, 23, 42, 0.35);
+      --max: 46rem;
+      --glow: 0 0 80px -20px rgba(34, 211, 238, 0.35);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -43,167 +41,179 @@
       margin: 0;
       font-family: var(--font);
       font-size: 1rem;
-      line-height: 1.85;
-      color: var(--body);
-      background: var(--paper);
-      background-image:
-        radial-gradient(120% 80% at 50% -20%, rgba(29, 78, 216, 0.07), transparent 55%),
-        radial-gradient(80% 50% at 100% 0%, rgba(4, 120, 87, 0.06), transparent 50%);
+      line-height: 1.8;
+      color: var(--text);
+      background: var(--bg0);
+      min-height: 100vh;
     }
 
-    .page {
-      max-width: calc(var(--max-text) + 2.5rem);
+    /* 背景メッシュ */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(900px 500px at 10% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+        radial-gradient(700px 420px at 95% 15%, rgba(167, 139, 250, 0.12), transparent 55%),
+        radial-gradient(600px 400px at 50% 100%, rgba(52, 211, 153, 0.06), transparent 50%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 45%, var(--bg0) 100%);
+    }
+    .page-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath fill='%23ffffff' fill-opacity='0.02' d='M0 0h160v1H0zM0 40h160v1H0zM0 80h160v1H0zM0 120h160v1H0zM0 0v160h1V0zM40 0v160h1V0zM80 0v160h1V0zM120 0v160h1V0z'/%3E%3C/svg%3E");
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .layout {
+      max-width: calc(var(--max) + 2.5rem);
       margin: 0 auto;
-      padding: 2.25rem 1.2rem 4.5rem;
+      padding: 0 1.25rem 4.5rem;
     }
 
-    /* タイトルブロック */
-    .masthead {
-      margin-bottom: 1.75rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--line);
+    /* ヒーロー */
+    .hero {
+      padding: 2.75rem 0 2rem;
+      position: relative;
     }
-    .masthead-kicker {
-      margin: 0 0 0.6rem;
-      font-size: 0.75rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: -1rem;
+      top: 2rem;
+      width: 4px;
+      height: min(200px, 40vh);
+      border-radius: 4px;
+      background: linear-gradient(180deg, var(--cyan), var(--violet));
+      opacity: 0.85;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 0.9rem;
+      padding: 0.28rem 0.65rem 0.28rem 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: #0f172a;
+      background: linear-gradient(90deg, var(--cyan), #67e8f9);
+      border-radius: 999px;
+      box-shadow: var(--glow);
     }
-    .masthead-switch {
-      margin: 0 0 0.85rem;
-      font-size: 0.86rem;
-      font-weight: 700;
+    .hero-eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0f172a;
+      opacity: 0.35;
     }
-    .masthead-switch a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(29, 78, 216, 0.35);
-    }
-    .masthead-switch a:hover { border-bottom-color: var(--accent); }
-    .masthead h1 {
-      margin: 0 0 0.85rem;
-      font-size: clamp(1.35rem, 4vw, 1.85rem);
+    .hero h1 {
+      font-size: clamp(1.5rem, 4.8vw, 2.05rem);
       font-weight: 900;
-      line-height: 1.35;
-      letter-spacing: -0.025em;
-      color: var(--ink);
-      max-width: 18em;
+      line-height: 1.3;
+      margin: 0 0 1rem;
+      letter-spacing: -0.03em;
+      max-width: 20em;
+      background: linear-gradient(120deg, #fff 10%, #e2e8f0 40%, var(--cyan) 95%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    .masthead-lead {
-      margin: 0 0 1.15rem;
-      font-size: 0.95rem;
+    .hero-lead {
+      margin: 0 0 1.35rem;
       color: var(--muted);
-      max-width: 38em;
+      font-size: 0.95rem;
+      max-width: 36em;
       font-weight: 500;
     }
-    .thesis {
-      margin: 0;
-      padding: 0.95rem 1.1rem;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--ink);
-      border-left: 4px solid var(--accent);
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
     }
-    .thesis span {
-      display: block;
-      margin-top: 0.35rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--muted);
+    .hero-chips span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.38rem 0.75rem;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
     }
-
-    /* 凡例：図の意味を共有 */
-    .legend {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-      margin: 1.5rem 0 0;
-      padding: 0.85rem 1rem;
-      background: var(--neutral-bg);
-      border: 1px dashed var(--line);
-      border-radius: var(--radius);
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--neutral);
-    }
-    @media (min-width: 520px) {
-      .legend { grid-template-columns: 1fr 1fr; }
-    }
-    .legend-item { display: flex; align-items: center; gap: 0.45rem; }
-    .swatch {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      flex-shrink: 0;
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-    .swatch--bad { background: var(--bad-bg); border-color: var(--bad-border); }
-    .swatch--ok { background: var(--ok-bg); border-color: var(--ok-border); }
-    .swatch--flow { background: var(--accent-soft); border-color: #93c5fd; }
-    .swatch--you { background: #fff7ed; border-color: #fdba74; }
-
-    /* 図表 */
-    figure.fig {
-      margin: 1.75rem auto;
-      padding: 0;
-      max-width: var(--max-fig);
-    }
-    figure.fig figcaption {
-      margin: 0 0 0.65rem;
-      font-size: 0.82rem;
+    .hero-chips span i {
+      font-style: normal;
+      font-size: 0.62rem;
       font-weight: 900;
-      color: var(--ink);
-      letter-spacing: 0.02em;
+      color: var(--cyan);
+      opacity: 0.9;
     }
-    figure.fig .fig-cap-sub {
-      display: block;
-      margin-top: 0.25rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0;
-    }
-    .fig-panel {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 1rem 0.65rem 1.05rem;
-      box-shadow: var(--shadow);
-    }
-    .svg-frame {
-      width: 100%;
+
+    /* ジャンプナビ */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin: 0 -1.25rem 1.5rem;
+      padding: 0.55rem 1.25rem;
+      background: linear-gradient(180deg, rgba(7, 10, 18, 0.92), rgba(7, 10, 18, 0.72));
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
-    .svg-frame svg {
-      display: block;
-      min-width: 520px;
-      width: 100%;
-      max-height: 420px;
+    .jump-nav::-webkit-scrollbar { display: none; }
+    .jump-nav-inner {
+      display: flex;
+      gap: 0.45rem;
+      min-width: min-content;
+      padding-bottom: 0.1rem;
+    }
+    .jump-nav a {
+      flex-shrink: 0;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: color 0.15s, background 0.15s, border 0.15s;
+    }
+    .jump-nav a:hover,
+    .jump-nav a:focus-visible {
+      color: var(--text);
+      background: var(--surface2);
+      border-color: var(--border);
+      outline: none;
     }
 
     /* 目次 */
     nav.toc {
-      margin: 2rem 0 2.5rem;
-      padding: 1.2rem 1.25rem;
-      background: var(--card);
-      border: 1px solid var(--line);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
+      padding: 1.35rem 1.35rem 1.2rem;
+      margin-bottom: 2.5rem;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
     }
     nav.toc h2 {
-      margin: 0 0 0.85rem;
+      margin: 0 0 1rem;
       font-size: 0.72rem;
       font-weight: 900;
-      letter-spacing: 0.14em;
-      color: var(--muted);
+      letter-spacing: 0.16em;
       text-transform: uppercase;
+      color: var(--dim);
     }
     nav.toc ol {
       margin: 0;
@@ -211,343 +221,685 @@
       list-style: none;
       display: grid;
       gap: 0.35rem;
-      counter-reset: t;
     }
-    @media (min-width: 540px) {
-      nav.toc ol { grid-template-columns: 1fr 1fr; }
+    @media (min-width: 520px) {
+      nav.toc ol { grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; }
     }
     nav.toc li {
-      counter-increment: t;
       display: flex;
-      gap: 0.5rem;
       align-items: baseline;
+      gap: 0.5rem;
       font-size: 0.86rem;
       font-weight: 600;
     }
     nav.toc li::before {
-      content: counter(t, decimal-leading-zero);
-      font-size: 0.68rem;
+      content: counter(item, decimal-leading-zero);
+      counter-increment: item;
+      font-size: 0.65rem;
       font-weight: 900;
-      color: var(--accent);
-      min-width: 1.35rem;
+      color: var(--cyan);
       font-variant-numeric: tabular-nums;
+      min-width: 1.4rem;
     }
+    nav.toc ol { counter-reset: item; }
     nav.toc a {
-      color: var(--ink);
+      color: var(--text);
       text-decoration: none;
       border-bottom: 1px solid transparent;
+      transition: border 0.15s, color 0.15s;
     }
-    nav.toc a:hover {
-      border-bottom-color: rgba(29, 78, 216, 0.4);
-    }
+    nav.toc a:hover { border-bottom-color: rgba(34, 211, 238, 0.45); color: #fff; }
 
+    /* セクション */
     section {
       margin-bottom: 3rem;
-      scroll-margin-top: 1.25rem;
+      scroll-margin-top: 5.5rem;
     }
-    .sec-title {
+    .sec-head {
       display: flex;
-      gap: 0.65rem;
       align-items: flex-start;
-      margin-bottom: 1rem;
+      gap: 0.85rem;
+      margin-bottom: 1.1rem;
     }
-    .sec-num {
+    .sec-badge {
       flex-shrink: 0;
-      width: 2.15rem;
-      height: 2.15rem;
-      border-radius: 10px;
+      min-width: 2.5rem;
+      height: 2.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 900;
-      color: #fff;
-      background: var(--accent);
-      margin-top: 0.1rem;
+      color: #0f172a;
+      background: linear-gradient(135deg, var(--cyan), #818cf8);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px -8px rgba(34, 211, 238, 0.45);
     }
     section h2 {
-      margin: 0;
-      font-size: 1.08rem;
+      font-size: 1.14rem;
       font-weight: 900;
+      margin: 0;
       line-height: 1.45;
-      color: var(--ink);
       letter-spacing: -0.02em;
     }
     section h3 {
-      margin: 1.35rem 0 0.45rem;
       font-size: 0.98rem;
       font-weight: 800;
-      color: var(--ink);
+      margin: 1.5rem 0 0.5rem;
+      color: #e2e8f0;
     }
-    p { margin: 0 0 1rem; }
-    ul { margin: 0 0 1rem; padding-left: 1.2rem; }
-    li { margin-bottom: 0.35rem; }
-    li::marker { color: var(--muted); }
-    strong { color: var(--ink); }
+    p { margin: 0 0 1rem; color: #cbd5e1; }
+    ul { margin: 0 0 1rem; padding-left: 1.2rem; color: #cbd5e1; }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--dim); }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--line);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.15rem 1.2rem;
+      padding: 1.2rem 1.3rem;
       margin: 1rem 0;
-      box-shadow: 0 8px 28px -22px rgba(15, 23, 42, 0.3);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
-    .prompt {
+    .card strong { color: #fff; }
+    .prompt-box {
+      position: relative;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.09), rgba(167, 139, 250, 0.08));
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      padding: 1.15rem 1.25rem 1.15rem 83px;
       margin: 1rem 0;
-      padding: 1.05rem 1.15rem 1.05rem 1rem;
       border-radius: var(--radius);
-      border: 1px solid #bfdbfe;
-      background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+      font-size: 0.92rem;
       box-shadow: var(--shadow);
     }
-    .prompt .label {
-      margin: 0 0 0.45rem;
-      font-size: 0.72rem;
+    .prompt-box::before {
+      content: "QUOTE";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      font-size: 0.58rem;
       font-weight: 900;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      opacity: 0.65;
     }
-    .prompt p { margin: 0; font-size: 0.92rem; font-weight: 600; color: var(--ink); }
-    .prompt p + p { margin-top: 0.6rem; }
-
-    .callout-warn {
-      margin: 1rem 0;
-      padding: 1rem 1.1rem;
+    @media (max-width: 520px) {
+      .prompt-box { padding-left: 1.15rem; padding-top: 2.2rem; }
+      .prompt-box::before {
+        transform: none;
+        top: 0.85rem;
+        left: 1.15rem;
+      }
+    }
+    .prompt-box p:last-child { margin-bottom: 0; }
+    .note {
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.35);
       border-radius: var(--radius);
-      border: 1px solid var(--warn-border);
-      background: var(--warn-bg);
+      padding: 1rem 1.15rem;
       font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--warn);
-    }
-    .callout-warn strong { color: #92400e; }
-
-    .flow-list {
+      color: #fde68a;
       margin: 1rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
     }
-    .flow-list > div {
-      display: flex;
-      gap: 0.65rem;
-      align-items: flex-start;
-    }
-    .flow-list .n {
+    .note strong { color: #fff; }
+    .note p:last-child { margin-bottom: 0; }
+
+    .flow { display: flex; flex-direction: column; gap: 0.55rem; margin: 1rem 0; }
+    .flow-step { display: flex; gap: 0.85rem; align-items: flex-start; }
+    .flow-num {
       flex-shrink: 0;
-      width: 1.65rem;
-      height: 1.65rem;
+      width: 1.85rem;
+      height: 1.85rem;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      color: #0f172a;
       border-radius: 50%;
-      background: var(--ink);
-      color: #fff;
       font-size: 0.72rem;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 0.15rem;
+      margin-top: 0.2rem;
     }
-    .flow-list .t { font-weight: 600; color: var(--body); }
-    .flow-list strong { color: var(--ink); }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.85rem;
-      margin: 1rem 0;
-    }
-    @media (min-width: 520px) {
-      .grid-2 { grid-template-columns: 1fr 1fr; }
-    }
-    .tile {
-      border-radius: var(--radius);
-      padding: 1rem 1.05rem;
-      border: 1px solid var(--line);
-      font-size: 0.88rem;
-      font-weight: 600;
-    }
-    .tile--bad { background: var(--bad-bg); border-color: var(--bad-border); color: #9f1239; }
-    .tile--ok { background: var(--ok-bg); border-color: var(--ok-border); color: #065f46; }
-    .tile h4 {
-      margin: 0 0 0.45rem;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    .tile p { margin: 0; }
+    .flow-step > div { color: #cbd5e1; }
+    .flow-step strong { color: #fff; }
 
     footer {
-      margin-top: 3rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--line);
+      margin-top: 3.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
       font-size: 0.82rem;
       color: var(--muted);
     }
-    footer a { color: var(--accent); text-decoration: none; font-weight: 700; border-bottom: 1px solid rgba(29,78,216,0.3); }
-    footer a:hover { border-bottom-color: var(--accent); }
-
+    footer a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+    }
+    footer a:hover { border-bottom-color: var(--cyan); }
     code {
       font-family: ui-monospace, monospace;
-      font-size: 0.86em;
-      background: var(--neutral-bg);
-      border: 1px solid var(--line);
-      padding: 0.08em 0.35em;
-      border-radius: 4px;
+      font-size: 0.88em;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      padding: 0.12em 0.4em;
+      border-radius: 6px;
+      color: #e2e8f0;
+    }
+
+    /* 図表 */
+    figure.viz { margin: 1.6rem 0; padding: 0; }
+    figure.viz figcaption {
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin: 0 0 0.65rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    figure.viz figcaption::before {
+      content: "";
+      width: 22px;
+      height: 3px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
+    }
+    .viz-surface {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .viz-pipeline-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.15rem;
+      padding-bottom: 0.35rem;
+    }
+    .viz-pipeline {
+      display: flex;
+      align-items: stretch;
+      min-width: min(100%, 40rem);
+    }
+    .viz-pipe-card {
+      flex: 1;
+      min-width: 7.25rem;
+      background: linear-gradient(165deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.95rem 0.55rem;
+      text-align: center;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .viz-pipe-card .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: #0f172a;
+      background: linear-gradient(135deg, var(--cyan), #818cf8);
+      margin-bottom: 0.45rem;
+    }
+    .viz-pipe-card .lbl {
+      font-size: 0.74rem;
+      font-weight: 900;
+      line-height: 1.35;
+      color: #fff;
+    }
+    .viz-pipe-card .sub {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.65rem;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.35;
+    }
+    .viz-pipe-arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 0.12rem;
+      color: var(--dim);
+      font-size: 1.15rem;
+      user-select: none;
+    }
+    .viz-pipe-loop-note {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .viz-pipe-loop-note span {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      background: rgba(167, 139, 250, 0.12);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      color: #ddd6fe;
+      border-radius: 999px;
+    }
+
+    .viz-timeline { list-style: none; margin: 0; padding: 0; }
+    .viz-timeline li {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.85rem 1rem;
+      padding-bottom: 1.1rem;
+    }
+    .viz-timeline li:last-child { padding-bottom: 0; }
+    .viz-timeline li::before {
+      content: "";
+      grid-row: 1 / -1;
+      grid-column: 1;
+      width: 3px;
+      margin-left: 0.72rem;
+      background: linear-gradient(180deg, var(--line-top, #475569), var(--line-bot, #334155));
+      border-radius: 2px;
+      margin-top: 0.1rem;
+      height: calc(100% + 0.2rem);
+    }
+    .viz-timeline li:last-child::before { height: 100%; }
+    .viz-timeline .dot {
+      grid-column: 1;
+      grid-row: 1;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: var(--dot-bg, #64748b);
+      border: 3px solid var(--bg0);
+      box-shadow: 0 0 0 1px var(--border);
+      z-index: 1;
+      justify-self: center;
+    }
+    .viz-timeline .box {
+      grid-column: 2;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.78rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.55;
+      color: #e2e8f0;
+    }
+    .viz-timeline.warn {
+      --line-top: #fb7185;
+      --line-bot: #f43f5e;
+      --dot-bg: #fb7185;
+    }
+    .viz-timeline.warn .box {
+      background: rgba(251, 113, 133, 0.08);
+      border-color: rgba(251, 113, 133, 0.35);
+      color: #fecdd3;
+    }
+
+    .viz-chat { display: flex; flex-direction: column; gap: 0.65rem; }
+    .viz-msg {
+      max-width: 92%;
+      padding: 0.85rem 1.05rem;
+      border-radius: 16px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      line-height: 1.6;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 40px -28px rgba(0,0,0,0.7);
+    }
+    .viz-msg .who {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.28rem;
+      opacity: 0.75;
+    }
+    .viz-msg--you {
+      align-self: flex-end;
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #f1f5f9;
+      border-bottom-right-radius: 4px;
+    }
+    .viz-msg--ai {
+      align-self: flex-start;
+      background: rgba(30, 58, 138, 0.45);
+      border-color: rgba(96, 165, 250, 0.35);
+      color: #dbeafe;
+      border-bottom-left-radius: 4px;
+    }
+    .viz-chat-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.85rem;
+      margin: 0.1rem 0;
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #c4b5fd;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px dashed rgba(167, 139, 250, 0.45);
+      border-radius: 999px;
+      align-self: center;
+    }
+
+    .viz-svg-wrap { width: 100%; overflow: hidden; }
+    .viz-svg-wrap svg { width: 100%; height: auto; display: block; }
+    .viz-sq {
+      fill: rgba(15, 23, 42, 0.65);
+      stroke: rgba(34, 211, 238, 0.35);
+      stroke-width: 1.25;
+    }
+    .viz-arrow-line {
+      fill: none;
+      stroke: #64748b;
+      stroke-width: 1.75;
+      marker-end: url(#m-end);
+    }
+    .viz-arrow-loop {
+      fill: none;
+      stroke: url(#g-arrow);
+      stroke-width: 2.25;
+      marker-end: url(#m-end2);
+    }
+    .viz-lbl { font-size: 11px; font-weight: 800; fill: #f1f5f9; }
+    .viz-lbl-sm { font-size: 10px; fill: #94a3b8; font-weight: 600; }
+
+    .viz-duo {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 560px) {
+      .viz-duo { grid-template-columns: 1fr 1fr; }
+    }
+    .viz-panel {
+      border-radius: var(--radius);
+      padding: 1.2rem 1.15rem;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+    .viz-panel[data-icon]::before {
+      content: attr(data-icon);
+      position: absolute;
+      top: 0.65rem;
+      right: 0.85rem;
+      font-size: 1.15rem;
+      opacity: 0.5;
+      font-weight: 900;
+    }
+    .viz-panel--narrow {
+      background: linear-gradient(155deg, rgba(251, 113, 133, 0.12), rgba(15, 23, 42, 0.35));
+      border-color: rgba(251, 113, 133, 0.28);
+    }
+    .viz-panel--wide {
+      background: linear-gradient(155deg, rgba(52, 211, 153, 0.12), rgba(15, 23, 42, 0.35));
+      border-color: rgba(52, 211, 153, 0.28);
+    }
+    .viz-panel--bad {
+      background: linear-gradient(155deg, rgba(251, 113, 133, 0.14), rgba(15, 23, 42, 0.4));
+      border-color: rgba(251, 113, 133, 0.35);
+    }
+    .viz-panel--ok {
+      background: linear-gradient(155deg, rgba(52, 211, 153, 0.14), rgba(15, 23, 42, 0.4));
+      border-color: rgba(52, 211, 153, 0.35);
+    }
+    .viz-panel h4 {
+      margin: 0 0 0.5rem;
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #fff;
+    }
+    .viz-panel p { margin: 0; font-size: 0.86rem; color: #cbd5e1 !important; font-weight: 600; }
+    .viz-mini-steps {
+      margin-top: 0.65rem;
+      padding-left: 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+
+    .viz-mgmt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.35rem 0;
+    }
+    .viz-avatar-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 28rem;
+    }
+    .viz-person {
+      flex: 1;
+      min-width: 8.5rem;
+      text-align: center;
+      padding: 1.05rem 0.75rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.45);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .viz-person .icon {
+      width: 2.6rem;
+      height: 2.6rem;
+      margin: 0 auto 0.5rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .viz-person .icon svg { width: 1.35rem; height: 1.35rem; opacity: 0.95; }
+    .viz-person--boss .icon {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.35), rgba(245, 158, 11, 0.2));
+      border: 1px solid rgba(251, 191, 36, 0.35);
+    }
+    .viz-person--staff .icon {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(129, 140, 248, 0.22));
+      border: 1px solid rgba(34, 211, 238, 0.3);
+    }
+    .viz-person .role {
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    .viz-person .name {
+      font-size: 0.9rem;
+      font-weight: 900;
+      margin-top: 0.2rem;
+      color: #fff;
+      line-height: 1.45;
+    }
+    .viz-bidir {
+      display: flex;
+      align-items: center;
+      align-self: center;
+      font-size: 0.74rem;
+      font-weight: 900;
+      color: var(--cyan);
+      padding: 0.4rem 0.75rem;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.28);
+      border-radius: 999px;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    @media (min-width: 560px) {
+      .compare { grid-template-columns: 1fr 1fr; }
+    }
+    .compare-box {
+      border-radius: var(--radius);
+      padding: 1.15rem 1.15rem;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .compare-box h4 {
+      margin: 0 0 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .compare-box.bad {
+      background: rgba(251, 113, 133, 0.08);
+      border-color: rgba(251, 113, 133, 0.35);
+    }
+    .compare-box.bad h4 { color: #fda4af; }
+    .compare-box.good {
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+    .compare-box.good h4 { color: #6ee7b7; }
+    .compare-box p { margin: 0; font-size: 0.86rem; color: #cbd5e1; font-weight: 600; }
+
+    .viz-note-inline {
+      margin: 0.35rem 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
+    }
+    .viz-note-inline.accent {
+      color: var(--cyan);
+      font-weight: 900;
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="masthead">
-      <p class="masthead-kicker">学びの設計図</p>
-      <p class="masthead-switch"><a href="mobile.html">スマホ向けレイアウト（縦積み・横スクロールなし）</a></p>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <div class="layout">
+    <header class="hero">
+      <p class="hero-eyebrow">Playbook</p>
       <h1>わからないからできないをなくす<br />— AIの使い方（対話・マネジメントの考え方）</h1>
-      <p class="masthead-lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい進め方のモデルとして使えます。</p>
-      <p class="thesis">
-        中心ルール：いきなり結論を求めない。状況・目的を置き、AIに不足を質問させ、情報が揃ってから整理させる。
-        <span>下の図は「意味のある流れ」を先に見せ、そのあと各章で理由と例外を足していきます。</span>
-      </p>
-      <div class="legend" role="note" aria-label="図の見方">
-        <div class="legend-item"><span class="swatch swatch--bad" aria-hidden="true"></span>赤系＝避けたい流れ／危険</div>
-        <div class="legend-item"><span class="swatch swatch--ok" aria-hidden="true"></span>緑系＝望ましい流れ／安心して進める型</div>
-        <div class="legend-item"><span class="swatch swatch--flow" aria-hidden="true"></span>青系＝推奨プロセス（再現手順）</div>
-        <div class="legend-item"><span class="swatch swatch--you" aria-hidden="true"></span>橙系＝あなたの責任・判断が要る箇所</div>
+      <p class="hero-lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい「進め方」の設計図として使えます。</p>
+      <div class="hero-chips" aria-label="要点の短い流れ">
+        <span><i>01</i> 状況・目的</span>
+        <span><i>02</i> AIに質問させる</span>
+        <span><i>03</i> 納得して実行</span>
+        <span><i>04</i> 結果を次へ</span>
       </div>
     </header>
 
-    <!-- マスター図：全体の意味 -->
-    <figure class="fig" id="fig-master">
-      <figcaption id="cap-master">
-        図1. 全体モデル（正しく伝わるための「順番」）
-        <span class="fig-cap-sub">入力を先に足す → 対話で厚くする → 出力は「案」として扱い → 実行と検証で次の入力へ戻す。</span>
-      </figcaption>
-      <div class="fig-panel">
-        <div class="svg-frame">
-          <svg viewBox="0 0 760 300" role="img" aria-labelledby="cap-master">
-            <defs>
-              <marker id="mk-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                <path d="M0,0 L7,3.5 L0,7 Z" fill="#64748b"/>
-              </marker>
-              <marker id="mk-arrB" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                <path d="M0,0 L7,3.5 L0,7 Z" fill="#1d4ed8"/>
-              </marker>
-              <linearGradient id="gCard" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#ffffff"/>
-                <stop offset="1" stop-color="#f8fafc"/>
-              </linearGradient>
-            </defs>
-            <text x="12" y="26" fill="#0f172a" font-size="13" font-weight="900" font-family="Noto Sans JP, sans-serif">一本道（推奨）</text>
-            <text x="12" y="44" fill="#64748b" font-size="11" font-weight="700" font-family="Noto Sans JP, sans-serif">左から右へ「意味」が積み上がる</text>
+    <nav class="jump-nav" aria-label="章へジャンプ">
+      <div class="jump-nav-inner">
+        <a href="#fig-overview">全体像</a>
+        <a href="#why-bad-first">§1 聞き方</a>
+        <a href="#better-start">§2 伝えること</a>
+        <a href="#loop">§3 ループ</a>
+        <a href="#over-spec">§4 指示の幅</a>
+        <a href="#doctor">§5 比喩</a>
+        <a href="#paradigm">§6 思考</a>
+        <a href="#responsibility">§7 責任</a>
+        <a href="#tools">§8 ツール</a>
+      </div>
+    </nav>
 
-            <!-- boxes -->
-            <rect x="20" y="70" width="150" height="76" rx="12" fill="url(#gCard)" stroke="#93c5fd" stroke-width="1.5"/>
-            <text x="95" y="98" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">1. 入力を置く</text>
-            <text x="95" y="118" text-anchor="middle" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">状況・目的</text>
-            <text x="95" y="134" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600" font-family="Noto Sans JP, sans-serif">＋「不足なら質問して」</text>
-
-            <path d="M170 108 H194" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#mk-arr)"/>
-
-            <rect x="200" y="70" width="178" height="76" rx="12" fill="url(#gCard)" stroke="#93c5fd" stroke-width="1.5"/>
-            <text x="289" y="98" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">2. 対話で厚み</text>
-            <text x="289" y="118" text-anchor="middle" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">AIの質問 ⇄ 事実回答</text>
-            <text x="289" y="134" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600" font-family="Noto Sans JP, sans-serif">（ここで前提が揃う）</text>
-
-            <path d="M378 108 H402" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#mk-arr)"/>
-
-            <rect x="408" y="70" width="160" height="76" rx="12" fill="url(#gCard)" stroke="#93c5fd" stroke-width="1.5"/>
-            <text x="488" y="98" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">3. 出力は「案」</text>
-            <text x="488" y="118" text-anchor="middle" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">選択肢・リスク整理</text>
-            <text x="488" y="134" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600" font-family="Noto Sans JP, sans-serif">まだ確定ではない</text>
-
-            <path d="M568 108 H592" stroke="#94a3b8" stroke-width="1.8" fill="none" marker-end="url(#mk-arr)"/>
-
-            <rect x="598" y="70" width="142" height="76" rx="12" fill="#fff7ed" stroke="#fb923c" stroke-width="2"/>
-            <text x="669" y="98" text-anchor="middle" fill="#c2410c" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">4. あなたが検証</text>
-            <text x="669" y="118" text-anchor="middle" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">納得→小さく実行</text>
-            <text x="669" y="134" text-anchor="middle" fill="#64748b" font-size="9" font-weight="600" font-family="Noto Sans JP, sans-serif">責任はここに残る</text>
-
-            <!-- loop -->
-            <path d="M 669 184 C 669 240, 120 250, 95 200" stroke="#1d4ed8" stroke-width="2" fill="none" marker-end="url(#mk-arrB)"/>
-            <text x="360" y="252" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">学び・結果を次の「状況・目的」へ戻す（成長ループ）</text>
-
-            <rect x="20" y="185" width="430" height="56" rx="12" fill="#fff1f2" stroke="#fda4af" stroke-width="1.2"/>
-            <text x="235" y="208" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">逆に、1を飛ばして「どうすれば？」だけ叩くと、2の厚みが作れないまま3に行きやすい</text>
-            <text x="235" y="226" text-anchor="middle" fill="#be123c" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">（＝情報不足のまま結論を急ぐ）</text>
-          </svg>
+    <figure class="viz" id="fig-overview">
+      <figcaption>全体像：情報を先に揃えてから動く</figcaption>
+      <div class="viz-surface">
+        <div class="viz-pipeline-wrap">
+          <div class="viz-pipeline" role="list">
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">1</span>
+              <span class="lbl">状況・目的</span>
+              <span class="sub">事実とゴールを渡す</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">2</span>
+              <span class="lbl">質問を依頼</span>
+              <span class="sub">「足りなければ聞いて」</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">3</span>
+              <span class="lbl">ラリーで情報増</span>
+              <span class="sub">質問→回答の反復</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">4</span>
+              <span class="lbl">提案が出る</span>
+              <span class="sub">案・リスク整理</span>
+            </div>
+            <span class="viz-pipe-arrow" aria-hidden="true">›</span>
+            <div class="viz-pipe-card" role="listitem">
+              <span class="num">5</span>
+              <span class="lbl">納得→実行</span>
+              <span class="sub">小さく試して検証</span>
+            </div>
+          </div>
         </div>
+        <p class="viz-pipe-loop-note"><span>検証結果を「次の状況」として 1 に戻す</span></p>
       </div>
     </figure>
 
     <nav class="toc" aria-label="目次">
-      <h2>目次</h2>
+      <h2>Contents</h2>
       <ol>
-        <li><a href="#fig-master">全体モデル（図1）</a></li>
-        <li><a href="#s1">いきなり聞くと弱い理由（図2）</a></li>
-        <li><a href="#s2">最初に伝える3点＋会話型（図3）</a></li>
-        <li><a href="#s3">納得・実行ループ（図4）</a></li>
-        <li><a href="#s4">指示が細かすぎると何が潰れるか（図5）</a></li>
-        <li><a href="#s5">医者と患者＝入力の役割分担（図6）</a></li>
-        <li><a href="#s6">パラダイム：思考とAIの分担（図7）</a></li>
-        <li><a href="#s7">責任の線引き：上司×部下（図8）</a></li>
-        <li><a href="#s8">ツールの一例</a></li>
+        <li><a href="#fig-overview">全体像（図）</a></li>
+        <li><a href="#why-bad-first">最初に「どうすればいい？」と聞くと弱くなる理由</a></li>
+        <li><a href="#better-start">代わりに最初に伝えること</a></li>
+        <li><a href="#loop">次の課題にする・納得して実行するループ</a></li>
+        <li><a href="#over-spec">具体指示しすぎると起きること（ナビ・アウトソースの比喩）</a></li>
+        <li><a href="#doctor">医者と患者の比喩（偏見・決めつけをしない）</a></li>
+        <li><a href="#paradigm">パラダイム：状況と目的を渡せば仮説は出せる／注意点</a></li>
+        <li><a href="#responsibility">責任は自分：AIは優秀な部下、橋渡しで終わらない</a></li>
+        <li><a href="#tools">ツールの一例</a></li>
       </ol>
     </nav>
 
-    <section id="s1">
-      <div class="sec-title"><span class="sec-num">1</span><h2>最初に「どうすればいい？」と聞くと弱くなる理由</h2></div>
+    <section id="why-bad-first">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">1</span>
+        <h2>最初に「どうすればいい？」と聞くと弱くなる理由</h2>
+      </div>
       <p>情報が足りないままAIに結論を求めると、AIは足りない前提のまま考え始めます。その結果、アウトプットの当たり外れが大きくなりやすい。</p>
-      <div class="grid-2">
-        <div class="tile tile--bad">
-          <h4>意味：穴が空いたまま</h4>
-          <p>いきなり「どうすれば？」だけを投げると、AIは欠けた前提を勝手に埋めて進みやすい。</p>
+      <div class="compare" aria-label="聞き方の対比">
+        <div class="compare-box bad">
+          <h4>避けたい始め方</h4>
+          <p>いきなり「どうすればいい？」だけを投げる → 穴埋め推論が始まりやすい。</p>
         </div>
-        <div class="tile tile--ok">
-          <h4>意味：土台を先に作る</h4>
-          <p>状況・目的を渡し、「足りないなら質問して」と明示すると、前提が対話で揃う。</p>
+        <div class="compare-box good">
+          <h4>望ましい始め方</h4>
+          <p>状況・目的を伝えたうえで、「足りないなら質問して」と明示する → 入力の器が広がる。</p>
         </div>
       </div>
-      <figure class="fig" id="fig-antipattern">
-        <figcaption id="cap-2">
-          図2. 同じ「質問」でも、出発点で意味が変わる
-          <span class="fig-cap-sub">上段は前提が薄いまま出力へ直行しやすい。下段は前提を厚くしてから出力へ。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 720 210" role="img" aria-labelledby="cap-2">
-              <defs>
-                <marker id="f2-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#64748b"/>
-                </marker>
-              </defs>
-              <text x="14" y="28" fill="#9f1239" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">弱くなりやすい</text>
-              <rect x="14" y="42" width="120" height="46" rx="10" fill="#ffe4e6" stroke="#fb7185"/>
-              <text x="74" y="62" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">曖昧な入力</text>
-              <text x="74" y="78" text-anchor="middle" fill="#be123c" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">情報が少ない</text>
-              <path d="M136 65 H168" stroke="#64748b" stroke-width="1.6" marker-end="url(#f2-arr)"/>
-              <rect x="170" y="42" width="110" height="46" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-              <text x="225" y="70" text-anchor="middle" fill="#334155" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">「どうすれば？」</text>
-              <path d="M282 65 H318" stroke="#64748b" stroke-width="1.6" marker-end="url(#f2-arr)"/>
-              <rect x="320" y="38" width="160" height="54" rx="10" fill="#ffe4e6" stroke="#fb7185" stroke-width="1.5"/>
-              <text x="400" y="60" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">結論っぽい出力</text>
-              <text x="400" y="78" text-anchor="middle" fill="#be123c" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">ブレ幅が大きい</text>
-
-              <text x="14" y="128" fill="#047857" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">望ましい</text>
-              <rect x="14" y="142" width="150" height="54" rx="10" fill="#d1fae5" stroke="#34d399"/>
-              <text x="89" y="165" text-anchor="middle" fill="#065f46" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">状況・目的＋質問依頼</text>
-              <text x="89" y="182" text-anchor="middle" fill="#047857" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">“不足は聞いて”</text>
-              <path d="M166 169 H202" stroke="#64748b" stroke-width="1.6" marker-end="url(#f2-arr)"/>
-              <rect x="204" y="142" width="170" height="54" rx="10" fill="#ffffff" stroke="#34d399"/>
-              <text x="289" y="165" text-anchor="middle" fill="#334155" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">質問ラリー（厚み）</text>
-              <text x="289" y="182" text-anchor="middle" fill="#047857" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">前提が揃う</text>
-              <path d="M376 169 H412" stroke="#64748b" stroke-width="1.6" marker-end="url(#f2-arr)"/>
-              <rect x="414" y="142" width="150" height="54" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="1.4"/>
-              <text x="489" y="165" text-anchor="middle" fill="#065f46" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">整理された案</text>
-              <text x="489" y="182" text-anchor="middle" fill="#047857" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">ブレ幅が小さくなりやすい</text>
-            </svg>
-          </div>
+      <figure class="viz">
+        <figcaption>情報不足のまま結論を急ぐと起きること（下に進むほど危うい）</figcaption>
+        <div class="viz-surface">
+          <ul class="viz-timeline warn">
+            <li><span class="dot"></span><div class="box">入力の情報が少ない</div></li>
+            <li><span class="dot"></span><div class="box">AIは「ない前提」を勝手に補完して考え始める</div></li>
+            <li><span class="dot"></span><div class="box">結論の当たり外れが大きくなりやすい</div></li>
+          </ul>
         </div>
       </figure>
       <div class="card">
@@ -555,77 +907,49 @@
       </div>
     </section>
 
-    <section id="s2">
-      <div class="sec-title"><span class="sec-num">2</span><h2>代わりに最初に伝えること</h2></div>
+    <section id="better-start">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">2</span>
+        <h2>代わりに最初に伝えること</h2>
+      </div>
       <p>次の3つをセットで伝える。</p>
       <ul>
         <li><strong>今の状況</strong>（わかる範囲で事実ベース）</li>
         <li><strong>目的</strong>（何を達成したいか）</li>
         <li><strong>自分は何をすべきか分からない</strong>ので、AIに<strong>自分へ質問して情報を集め、十分なら改善策や選択肢を出してほしい</strong></li>
       </ul>
-
-      <figure class="fig" id="fig-three">
-        <figcaption id="cap-3a">
-          図3a. 「最初の3点」＝意味のトライアングル
-          <span class="fig-cap-sub">どれか1つ欠けると、AIは当てにいく部屋が増える。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 640 240" role="img" aria-labelledby="cap-3a">
-              <polygon points="320,34 520,190 120,190" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
-              <text x="320" y="92" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="900" font-family="Noto Sans JP, sans-serif">状況（事実）</text>
-              <text x="185" y="175" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="900" font-family="Noto Sans JP, sans-serif">目的（ゴール）</text>
-              <text x="455" y="175" text-anchor="middle" fill="#1d4ed8" font-size="13" font-weight="900" font-family="Noto Sans JP, sans-serif">「質問して」宣言</text>
-              <circle cx="320" cy="132" r="34" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
-              <text x="320" y="128" text-anchor="middle" fill="#0f172a" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">セットで</text>
-              <text x="320" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">初手の意味</text>
-              <text x="320" y="214" text-anchor="middle" fill="#64748b" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">3点を置いた直後に「AIへ質問を依頼」して初めて、対話が“設計された行為”になる</text>
-            </svg>
-          </div>
-        </div>
-      </figure>
-
-      <div class="prompt">
-        <p class="label">コピペ用（意図の言語化）</p>
+      <div class="prompt-box">
+        <p><strong>例（意図の伝え方）</strong></p>
         <p>「状況は〇〇、目的は△△です。自分では次に何をすべきか判断できないので、不足がなくなるまで私に質問してください。十分な情報が揃ったタイミングで、改善策・選択肢・リスクを整理してください。」</p>
       </div>
-
-      <figure class="fig" id="fig-chat">
-        <figcaption id="cap-3b">
-          図3b. 会話の型（“質問ラリー”が意味を持つ理由）
-          <span class="fig-cap-sub">点ではなく線：往復のたびに、前提の解像度が上がる。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 620 260" role="img" aria-labelledby="cap-3b">
-              <defs>
-                <marker id="f3-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#94a3b8"/>
-                </marker>
-              </defs>
-              <rect x="320" y="20" width="280" height="52" rx="12" fill="#f1f5f9" stroke="#cbd5e1"/>
-              <text x="360" y="42" fill="#0f172a" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">You：</text>
-              <text x="360" y="58" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">状況・目的＋「不足なら質問」</text>
-              <rect x="20" y="88" width="280" height="52" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
-              <text x="40" y="110" fill="#1d4ed8" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">AI：</text>
-              <text x="40" y="126" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">不足を埋める質問</text>
-              <rect x="320" y="156" width="280" height="52" rx="12" fill="#f1f5f9" stroke="#cbd5e1"/>
-              <text x="340" y="178" fill="#0f172a" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">You：</text>
-              <text x="340" y="194" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">事実ベースで回答</text>
-
-              <path d="M460 72 C 320 82 300 110 160 112" stroke="#94a3b8" stroke-width="1.6" fill="none" marker-end="url(#f3-arr)"/>
-              <path d="M160 140 C 300 150 320 175 460 184" stroke="#94a3b8" stroke-width="1.6" fill="none" marker-end="url(#f3-arr)"/>
-
-              <rect x="150" y="214" width="320" height="36" rx="999" fill="#fffbeb" stroke="#fcd34d"/>
-              <text x="310" y="236" text-anchor="middle" fill="#b45309" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">十分になったら、AIが「案・リスク」を束ねて返す</text>
-            </svg>
+      <p>こうすると質問のラリーで情報が溜まり、最初から結論を急がない分、出力が安定しやすい。</p>
+      <figure class="viz">
+        <figcaption>会話の型（チャットのイメージ）</figcaption>
+        <div class="viz-surface">
+          <div class="viz-chat">
+            <div class="viz-msg viz-msg--you">
+              <span class="who">You</span>
+              状況・目的を渡す。「分からないので、不足があれば質問して」と添える。
+            </div>
+            <div class="viz-msg viz-msg--ai">
+              <span class="who">AI</span>
+              不足を埋めるための質問（1問ずつでもまとめてでもOK）。
+            </div>
+            <div class="viz-chat-loop" aria-label="繰り返し">質問 ⇄ 回答（事実ベース）をくり返す</div>
+            <div class="viz-msg viz-msg--ai">
+              <span class="who">AI</span>
+              情報が揃ったら、改善策・選択肢・リスクを整理して提案。
+            </div>
           </div>
         </div>
       </figure>
     </section>
 
-    <section id="s3">
-      <div class="sec-title"><span class="sec-num">3</span><h2>次の課題にする・納得して実行するループ</h2></div>
+    <section id="loop">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">3</span>
+        <h2>次の課題にする・納得して実行するループ</h2>
+      </div>
       <p>出たアウトプットを、そのまま正解として採用せず<strong>次の課題</strong>にする。経験が浅いときは「どれを実行すべきか」が分からなくて当然なので、次のようにAIを使うと進みやすい。</p>
       <ul>
         <li>各案について、<strong>なぜ効きそうか／理屈</strong>を説明させる</li>
@@ -633,50 +957,58 @@
         <li>必要なら<strong>関係者への説明文</strong>まで整え、承認を取りながら小さく試す</li>
         <li>結果が出たら、<strong>結果の解釈</strong>も含めて次の入力にする</li>
       </ul>
-      <div class="callout-warn">
+      <div class="note">
         <p><strong>留意：</strong>AIを使わないから仮説精度が上がる、ではない。使い方を意識しないと、判断不能のまま回り続けやすい。だからこそ、状況→質問→納得→実行→検証、の型を持つ。</p>
       </div>
-
-      <figure class="fig" id="fig-loop">
-        <figcaption id="cap-4">
-          図4. アウトプットは「次の課題」：検証が次の入力を作る
-          <span class="fig-cap-sub">橙色は「意思決定と責任」。ここを飛ばすと“橋渡し”になる。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 660 300" role="img" aria-labelledby="cap-4">
+      <figure class="viz">
+        <figcaption>実行までのループ（1周すると次のテーマに強くなる）</figcaption>
+        <div class="viz-surface">
+          <div class="viz-svg-wrap">
+            <svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
-                <marker id="f4-arr" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#94a3b8"/>
+                <linearGradient id="g-arrow" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#22d3ee" />
+                  <stop offset="100%" style="stop-color:#818cf8" />
+                </linearGradient>
+                <marker id="m-end" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#64748b" />
                 </marker>
-                <marker id="f4-arrB" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
-                  <path d="M0,0 L7,3.5 L0,7 Z" fill="#1d4ed8"/>
+                <marker id="m-end2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+                  <path d="M0,0 L9,4.5 L0,9 Z" fill="#22d3ee" />
                 </marker>
               </defs>
-              <rect x="230" y="20" width="200" height="52" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-              <text x="330" y="40" text-anchor="middle" fill="#334155" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">AIの提案（案）</text>
-              <text x="330" y="56" text-anchor="middle" fill="#64748b" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">まだ採用判断しない</text>
-              <path d="M330 72 V92" stroke="#94a3b8" stroke-width="1.7" marker-end="url(#f4-arr)"/>
-              <rect x="210" y="96" width="240" height="54" rx="12" fill="#eff6ff" stroke="#60a5fa"/>
-              <text x="330" y="118" text-anchor="middle" fill="#1d4ed8" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">理屈・リスクを掘る</text>
-              <text x="330" y="136" text-anchor="middle" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">（納得＝意味のある採用）</text>
-              <path d="M330 150 V172" stroke="#94a3b8" stroke-width="1.7" marker-end="url(#f4-arr)"/>
-              <polygon points="330,174 380,214 280,214" fill="#fff7ed" stroke="#fb923c" stroke-width="2"/>
-              <text x="330" y="206" text-anchor="middle" fill="#c2410c" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">あなたが選ぶ</text>
-              <path d="M330 214 V238" stroke="#94a3b8" stroke-width="1.7" marker-end="url(#f4-arr)"/>
-              <rect x="235" y="242" width="190" height="48" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
-              <text x="330" y="262" text-anchor="middle" fill="#334155" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">小さく実行→結果</text>
-              <text x="330" y="278" text-anchor="middle" fill="#64748b" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">結果の解釈を次の入力へ（図1のループ）</text>
-              <path d="M425 266 C 610 266 610 46 435 46" stroke="#1d4ed8" stroke-width="1.9" fill="none" marker-end="url(#f4-arrB)"/>
-              <text x="555" y="150" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">更新</text>
+              <rect class="viz-sq" x="170" y="20" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="44" text-anchor="middle">AIの提案</text>
+              <text class="viz-lbl-sm" x="240" y="58" text-anchor="middle">まだ「正解」と決めない</text>
+              <path class="viz-arrow-line" d="M 240 72 L 240 88" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="92" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="116" text-anchor="middle">理屈・リスク</text>
+              <text class="viz-lbl-sm" x="240" y="130" text-anchor="middle">納得できるまで掘る</text>
+              <path class="viz-arrow-line" d="M 240 144 L 240 160" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="164" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="188" text-anchor="middle">小さく実行</text>
+              <text class="viz-lbl-sm" x="240" y="202" text-anchor="middle">承認・スコープを守る</text>
+              <path class="viz-arrow-line" d="M 240 216 L 240 232" marker-end="url(#m-end)" />
+
+              <rect class="viz-sq" x="170" y="236" width="140" height="52" rx="12" />
+              <text class="viz-lbl" x="240" y="260" text-anchor="middle">結果と解釈</text>
+              <text class="viz-lbl-sm" x="240" y="274" text-anchor="middle">次の「状況・目的」へ</text>
+
+              <path class="viz-arrow-loop" d="M 310 260 C 420 260 430 50 310 46" fill="none" />
+              <text class="viz-lbl-sm" x="395" y="155" text-anchor="middle" fill="#22d3ee" font-weight="800">次へ</text>
             </svg>
           </div>
         </div>
       </figure>
     </section>
 
-    <section id="s4">
-      <div class="sec-title"><span class="sec-num">4</span><h2>具体指示しすぎると起きること</h2></div>
+    <section id="over-spec">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">4</span>
+        <h2>具体指示しすぎると起きること</h2>
+      </div>
       <h3>ターンバイターンのナビの比喩</h3>
       <p>道順を極端に細かく指定すると、相手（実行側）はその通りに動きやすくなり、<strong>ショートカットや別解</strong>を見つける余地が減る。AIへの指示も同様で、「細かすぎる手順の丸投げ」は発想の幅を狭めることがある。</p>
       <h3>一方で効く聞き方</h3>
@@ -687,108 +1019,111 @@
         <li>「このやり方の危険・懸念は何か」</li>
       </ul>
       <p>最初から<strong>状況・目的・「質問してから提案して」</strong>とセットにすると、AIが狭い世界の中だけで独りPDCAする状況を避けやすい。</p>
-
-      <figure class="fig" id="fig-narrow">
-        <figcaption id="cap-5">
-          図5. 「道幅」＝探索余地（発想の自由度）
-          <span class="fig-cap-sub">左：手順の制約が強いほど、改善の抜け道が見えにくい。右：目的と制約は残しつつ、手段の余地を残す。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 660 230" role="img" aria-labelledby="cap-5">
-              <rect x="20" y="40" width="280" height="150" rx="14" fill="#ffe4e6" stroke="#fb7185"/>
-              <rect x="130" y="60" width="60" height="110" rx="10" fill="#ffffff" stroke="#fb7185" stroke-width="2"/>
-              <text x="160" y="83" text-anchor="middle" fill="#9f1239" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">細い</text>
-              <text x="160" y="102" text-anchor="middle" fill="#be123c" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">手順</text>
-              <text x="160" y="122" text-anchor="middle" fill="#be123c" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">ドット</text>
-              <text x="160" y="142" text-anchor="middle" fill="#be123c" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">打ち</text>
-              <text x="160" y="165" text-anchor="middle" fill="#9f1239" font-size="9" font-weight="800" font-family="Noto Sans JP, sans-serif">ショートカットが見えにくい</text>
-              <text x="160" y="24" text-anchor="middle" fill="#9f1239" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">探索の幅：狭い</text>
-
-              <rect x="360" y="40" width="280" height="150" rx="14" fill="#d1fae5" stroke="#34d399"/>
-              <path d="M 430 155 C 470 70 520 70 570 155" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="7 7"/>
-              <path d="M 455 150 C 500 95 540 95 585 150" fill="none" stroke="#059669" stroke-width="2.5"/>
-              <circle cx="500" cy="110" r="20" fill="#ffffff" stroke="#059669" stroke-width="2"/>
-              <text x="500" y="116" text-anchor="middle" fill="#065f46" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">別解</text>
-              <text x="500" y="24" text-anchor="middle" fill="#047857" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">探索の幅：広い</text>
-              <text x="500" y="200" text-anchor="middle" fill="#047857" font-size="10" font-weight="800" font-family="Noto Sans JP, sans-serif">「合ってる？危険は？」で余地を戻す</text>
-            </svg>
+      <figure class="viz">
+        <figcaption>比べてみる：道幅＝発想の幅</figcaption>
+        <div class="viz-duo">
+          <div class="viz-panel viz-panel--narrow">
+            <h4>手順ドット打ち</h4>
+            <p>細かい指示は「安全」に見えるが、探索の余地が狭まる。</p>
+            <div class="viz-mini-steps">
+              ・一歩ごとに指定<br />
+              ・寄り道しにくい<br />
+              ・ショートカットに気づきにくい
+            </div>
+          </div>
+          <div class="viz-panel viz-panel--wide">
+            <h4>目的＋自分の案＋推敲</h4>
+            <p>ゴールと制約は渡しつつ、改善・危険・別解の余地を残す。</p>
+            <div class="viz-mini-steps">
+              ・目的は固定、手段は柔らかく<br />
+              ・「合ってる？」「危険は？」で広がる<br />
+              ・質問フローとも相性がいい
+            </div>
           </div>
         </div>
       </figure>
     </section>
 
-    <section id="s5">
-      <div class="sec-title"><span class="sec-num">5</span><h2>医者と患者の比喩</h2></div>
+    <section id="doctor">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">5</span>
+        <h2>医者と患者の比喩</h2>
+      </div>
       <p>患者がやるのは、決めつけた病名の主張より、<strong>観測できる症状・経過の報告</strong>。診断は、情報を聞いた側（医者／AI側）が整理する。</p>
       <ul>
         <li>「これは絶対〇〇だ」と結論を先に言うと、報告の質が落ち、入力が歪み、アウトプットもズレやすい</li>
         <li>事実・違和感・期限・制約を出し、質問に答える。これが精度を上げる</li>
       </ul>
-
-      <figure class="fig" id="fig-doctor">
-        <figcaption id="cap-6">
-          図6. 役割分担：誰が「決めつけ」を担うと壊れるか
-          <span class="fig-cap-sub">左は入力が主観に寄る。右は観測→質問で客観データが増える。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 680 200" role="img" aria-labelledby="cap-6">
-              <rect x="20" y="24" width="300" height="150" rx="14" fill="#ffe4e6" stroke="#fb7185"/>
-              <text x="170" y="52" text-anchor="middle" fill="#9f1239" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">ユーザーが結論を先に言う</text>
-              <text x="30" y="82" fill="#be123c" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">あなた：</text>
-              <text x="30" y="100" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">決めつけ・主張</text>
-              <text x="30" y="122" fill="#64748b" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">↓</text>
-              <text x="30" y="140" fill="#be123c" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">AI：</text>
-              <text x="30" y="158" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">その前提に引きずられる</text>
-
-              <rect x="360" y="24" width="300" height="150" rx="14" fill="#d1fae5" stroke="#34d399"/>
-              <text x="510" y="52" text-anchor="middle" fill="#047857" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">観測→質問→整理（望ましい）</text>
-              <text x="372" y="82" fill="#047857" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">あなた：</text>
-              <text x="372" y="100" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">事実・制約・違和感</text>
-              <text x="372" y="122" fill="#64748b" font-size="9" font-weight="700" font-family="Noto Sans JP, sans-serif">↓</text>
-              <text x="372" y="140" fill="#047857" font-size="10" font-weight="900" font-family="Noto Sans JP, sans-serif">AI：</text>
-              <text x="372" y="158" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">質問で補完→提案を束ねる</text>
-            </svg>
+      <figure class="viz">
+        <figcaption>入力の型：決めつけないほうが、出力がブレにくい</figcaption>
+        <div class="viz-duo">
+          <div class="viz-panel viz-panel--bad" data-icon="✗">
+            <h4>弱くなりやすい</h4>
+            <p>結論を先に言う（自己診断を押しつける）。事実より主張が目立つ。</p>
+            <div class="viz-mini-steps">決めつけ → 情報が歪む → 提案もズレる</div>
+          </div>
+          <div class="viz-panel viz-panel--ok" data-icon="✓">
+            <h4>望ましい</h4>
+            <p>観測できる事実・制約を出す。相手（AI）が質問して整理する。</p>
+            <div class="viz-mini-steps">事実 → 質問で補完 → 筋の良い提案</div>
           </div>
         </div>
       </figure>
     </section>
 
-    <section id="s6">
-      <div class="sec-title"><span class="sec-num">6</span><h2>パラダイムと注意点</h2></div>
-      <div class="flow-list">
-        <div><span class="n">1</span><div class="t"><strong>無知だからできない</strong>、だけを理由に止まりにくくなる。状況と目的を渡せば、そこそこ筋の良い仮説を<strong>確率的に</strong>引き出しやすい。</div></div>
-        <div><span class="n">2</span><div class="t">その後は<strong>実行→結果の分析</strong>を回す。分析もAIに渡せるが、常に任せ切りだと<strong>自分の思考力が育ちにくい</strong>。</div></div>
-        <div><span class="n">3</span><div class="t">よいバランスは、<strong>自分なりの仮説を持ちながら</strong>AIを動かすこと。</div></div>
+    <section id="paradigm">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">6</span>
+        <h2>パラダイムと注意点</h2>
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <span class="flow-num">1</span>
+          <div><strong>無知だからできない</strong>、だけを理由に止まりにくくなる。状況と目的を渡せば、そこそこ筋の良い仮説を<strong>確率的に</strong>引き出しやすい。</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">2</span>
+          <div>その後は<strong>実行→結果の分析</strong>を回す。分析もAIに渡せるが、常に任せ切りだと<strong>自分の思考力が育ちにくい</strong>。</div>
+        </div>
+        <div class="flow-step">
+          <span class="flow-num">3</span>
+          <div>よいバランスは、<strong>自分なりの仮説を持ちながら</strong>AIを動かすこと。</div>
+        </div>
       </div>
       <h3>人への依頼・デザインとの共通項</h3>
       <p>「こう作って」と細かく指示すると、その通りになりやすい。目的を伝え、必要ならヒアリングしてほしいと言うと、残りの知性が解放されやすい（相手の能力次第では具体化が必要な場合もある）。</p>
-
-      <figure class="fig" id="fig-balance">
-        <figcaption id="cap-7">
-          図7. 思考の所有権：仮説はあなた、分解はAI（のが壊れにくい）
-          <span class="fig-cap-sub">棒の長さ＝その仕事の主担当。ゼロにしない（丸投げ回避）。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 620 170" role="img" aria-labelledby="cap-7">
-              <text x="20" y="28" fill="#0f172a" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">協働の配分（目安）</text>
-              <rect x="20" y="44" width="580" height="34" rx="10" fill="#f1f5f9" stroke="#e2e8f0"/>
-              <rect x="20" y="44" width="230" height="34" rx="10" fill="#fff7ed" stroke="#fb923c"/>
-              <text x="135" y="66" text-anchor="middle" fill="#9a3412" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">あなた：仮説・優先・許容リスク</text>
-              <rect x="250" y="44" width="350" height="34" rx="10" fill="#eff6ff" stroke="#60a5fa"/>
-              <text x="425" y="66" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">AI：質問・整理・反例・文章化</text>
-              <text x="20" y="110" fill="#64748b" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">意味：</text>
-              <text x="20" y="130" fill="#334155" font-size="10" font-weight="700" font-family="Noto Sans JP, sans-serif">AIに「考えを肩代わり」させすぎると、現場で説明できなくなる（責任の所在が曖昧になる）。</text>
-            </svg>
+      <figure class="viz">
+        <figcaption>役割分担：往復させるとブレにくい</figcaption>
+        <div class="viz-surface">
+          <div class="viz-mgmt">
+            <div class="viz-avatar-row">
+              <div class="viz-person viz-person--boss">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="role">You</div>
+                <div class="name">仮説・優先順位<br />リスク許容</div>
+              </div>
+              <div class="viz-bidir" aria-hidden="true">⇄</div>
+              <div class="viz-person viz-person--staff">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+                </div>
+                <div class="role">Partner</div>
+                <div class="name">質問・整理<br />反例・文章案</div>
+              </div>
+            </div>
+            <p class="viz-note-inline">一方向に流しっぱなしにせず、ツッコミと優先づけを返す</p>
           </div>
         </div>
       </figure>
     </section>
 
-    <section id="s7">
-      <div class="sec-title"><span class="sec-num">7</span><h2>責任は自分：AIは優秀な部下</h2></div>
+    <section id="responsibility">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">7</span>
+        <h2>責任は自分：AIは優秀な部下</h2>
+      </div>
       <p>AIは責任を取らない。だから<strong>「言われたからやる」では終わらない</strong>。部下が提案してきたときと同じで、納得したうえで意思決定する。</p>
       <ul>
         <li><strong>なぜその答えか</strong>をAIに説明させ、角のケースや反例も掘る</li>
@@ -797,40 +1132,48 @@
       <div class="card">
         <p><strong>心構え：</strong>優秀な道具が増えたのではなく、<strong>優秀な部下がいるので、自分は上司としてマネジメントする</strong>、と捉えるとブレにくい。</p>
       </div>
-
-      <figure class="fig" id="fig-mgmt">
-        <figcaption id="cap-8">
-          図8. 責任の山：上にいるほど「説明と決断」
-          <span class="fig-cap-sub">AIは下支え（材料と論点）。最後の一本線はあなた。</span>
-        </figcaption>
-        <div class="fig-panel">
-          <div class="svg-frame">
-            <svg viewBox="0 0 620 250" role="img" aria-labelledby="cap-8">
-              <polygon points="10,240 310,20 610,240" fill="#f8fafc" stroke="#e2e8f0"/>
-              <polygon points="120,220 310,70 500,220" fill="#fff7ed" stroke="#fb923c"/>
-              <text x="310" y="150" text-anchor="middle" fill="#9a3412" font-size="12" font-weight="900" font-family="Noto Sans JP, sans-serif">あなた：意思決定・説明責任</text>
-              <polygon points="200,215 310,130 420,215" fill="#eff6ff" stroke="#60a5fa"/>
-              <text x="310" y="195" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="900" font-family="Noto Sans JP, sans-serif">AI：提案・根拠・反例</text>
-              <text x="310" y="232" text-anchor="middle" fill="#64748b" font-size="10" font-weight="800" font-family="Noto Sans JP, sans-serif">「橋渡し」＝材料を渡さずに上へ投げること（NG）</text>
-            </svg>
+      <figure class="viz">
+        <figcaption>関係性：橋渡しで終わらせない</figcaption>
+        <div class="viz-surface">
+          <div class="viz-mgmt">
+            <div class="viz-avatar-row" style="max-width: 22rem;">
+              <div class="viz-person viz-person--boss">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M12 3l2 4 4 .5-3 3 1 4.5L12 14l-4 1.5 1-4.5-3-3 4-.5z"/></svg>
+                </div>
+                <div class="role">上司（あなた）</div>
+                <div class="name">意思決定<br />説明責任</div>
+              </div>
+              <div class="viz-bidir">根拠⇄質問</div>
+              <div class="viz-person viz-person--staff">
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><ellipse cx="12" cy="5" rx="5" ry="2"/><path d="M7 5v6c0 1.5 2.5 3 5 3s5-1.5 5-3V5"/><path d="M7 11c0 1.5 2.5 3 5 3s5-1.5 5-3"/></svg>
+                </div>
+                <div class="role">部下（AI）</div>
+                <div class="name">提案・根拠<br />反例の補足</div>
+              </div>
+            </div>
+            <p class="viz-note-inline accent">納得 → 実行と検証（責任は常にこちら）</p>
           </div>
         </div>
       </figure>
-
-      <div class="grid-2">
-        <div class="tile tile--bad">
-          <h4>意味：マネジメント不足</h4>
-          <p>出力をそのまま上司に渡すと、根拠を自分の言葉で持てない。</p>
+      <div class="compare">
+        <div class="compare-box bad">
+          <h4>マネジメントが弱いとき</h4>
+          <p>出力をそのまま上司に渡す「橋渡し」になり、自分は深く説明できない。</p>
         </div>
-        <div class="tile tile--ok">
-          <h4>意味：マネジメント適切</h4>
-          <p>論点を詰め、責任を持てる説明まで戻す。</p>
+        <div class="compare-box good">
+          <h4>マネジメントが効いているとき</h4>
+          <p>根拠と例外を詰め、自分の言葉で責任を持てる状態まで持っていく。</p>
         </div>
       </div>
     </section>
 
-    <section id="s8">
-      <div class="sec-title"><span class="sec-num">8</span><h2>ツールの一例（発言メモ）</h2></div>
+    <section id="tools">
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">8</span>
+        <h2>ツールの一例（発言メモ）</h2>
+      </div>
       <p>活字を読む習慣がない人でも、動画は見つつ、基本はチャットで試す、という運用もアリ。発言では <strong>Claude</strong> を軸に据える余地がある、との整理があった（環境や契約に合わせて選択する）。</p>
     </section>
 
