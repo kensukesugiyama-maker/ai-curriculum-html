@@ -3,284 +3,500 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#070a12" />
   <title>わからないからできないをなくす — AIの使い方（学びのまとめ）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f0f4f8;
-      --text: #0f172a;
-      --muted: #64748b;
-      --accent: #2563eb;
-      --accent-2: #4f46e5;
-      --accent-soft: #e0e7ff;
-      --border: #cbd5e1;
-      --card: #ffffff;
-      --warn: #b45309;
-      --warn-bg: #fffbeb;
-      --viz-ok: #059669;
-      --viz-ok-bg: #ecfdf5;
-      --viz-ng: #e11d48;
-      --viz-ng-bg: #fff1f2;
-      --viz-ai: #1d4ed8;
-      --viz-ai-bg: #eff6ff;
-      --viz-you: #475569;
-      --viz-you-bg: #f1f5f9;
-      --radius: 14px;
-      --shadow: 0 10px 40px -12px rgba(15, 23, 42, 0.18);
-      --shadow-sm: 0 4px 14px -4px rgba(15, 23, 42, 0.12);
+      --bg0: #070a12;
+      --bg1: #0d1324;
+      --surface: rgba(255, 255, 255, 0.045);
+      --surface2: rgba(255, 255, 255, 0.075);
+      --border: rgba(255, 255, 255, 0.1);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --cyan: #22d3ee;
+      --cyan-dim: rgba(34, 211, 238, 0.2);
+      --violet: #a78bfa;
+      --violet-dim: rgba(167, 139, 250, 0.2);
+      --rose: #fb7185;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 24px 80px -32px rgba(0, 0, 0, 0.65);
+      --font: "Noto Sans JP", system-ui, sans-serif;
+      --max: 46rem;
+      --glow: 0 0 80px -20px rgba(34, 211, 238, 0.35);
     }
-    * { box-sizing: border-box; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", system-ui, sans-serif;
+      font-family: var(--font);
       font-size: 1rem;
-      line-height: 1.75;
+      line-height: 1.8;
       color: var(--text);
-      background: var(--bg);
-      background-image: radial-gradient(ellipse 120% 80% at 50% -20%, #e0e7ff 0%, transparent 55%);
+      background: var(--bg0);
+      min-height: 100vh;
     }
-    .wrap {
-      max-width: 44rem;
+
+    /* 背景メッシュ */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(900px 500px at 10% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+        radial-gradient(700px 420px at 95% 15%, rgba(167, 139, 250, 0.12), transparent 55%),
+        radial-gradient(600px 400px at 50% 100%, rgba(52, 211, 153, 0.06), transparent 50%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 45%, var(--bg0) 100%);
+    }
+    .page-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath fill='%23ffffff' fill-opacity='0.02' d='M0 0h160v1H0zM0 40h160v1H0zM0 80h160v1H0zM0 120h160v1H0zM0 0v160h1V0zM40 0v160h1V0zM80 0v160h1V0zM120 0v160h1V0z'/%3E%3C/svg%3E");
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .layout {
+      max-width: calc(var(--max) + 2.5rem);
       margin: 0 auto;
-      padding: 2.5rem 1.25rem 4rem;
+      padding: 0 1.25rem 4.5rem;
     }
-    header {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
+
+    /* ヒーロー */
+    .hero {
+      padding: 2.75rem 0 2rem;
+      position: relative;
     }
-    h1 {
-      font-size: clamp(1.35rem, 4vw, 1.85rem);
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: -1rem;
+      top: 2rem;
+      width: 4px;
+      height: min(200px, 40vh);
+      border-radius: 4px;
+      background: linear-gradient(180deg, var(--cyan), var(--violet));
+      opacity: 0.85;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 0.9rem;
+      padding: 0.28rem 0.65rem 0.28rem 0.55rem;
+      font-size: 0.68rem;
       font-weight: 800;
-      line-height: 1.35;
-      margin: 0 0 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0f172a;
+      background: linear-gradient(90deg, var(--cyan), #67e8f9);
+      border-radius: 999px;
+      box-shadow: var(--glow);
+    }
+    .hero-eyebrow::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #0f172a;
+      opacity: 0.35;
+    }
+    .hero h1 {
+      font-size: clamp(1.5rem, 4.8vw, 2.05rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin: 0 0 1rem;
       letter-spacing: -0.03em;
-      background: linear-gradient(120deg, var(--text) 0%, var(--accent-2) 100%);
+      max-width: 20em;
+      background: linear-gradient(120deg, #fff 10%, #e2e8f0 40%, var(--cyan) 95%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    .lead {
-      margin: 0;
+    .hero-lead {
+      margin: 0 0 1.35rem;
       color: var(--muted);
       font-size: 0.95rem;
+      max-width: 36em;
+      font-weight: 500;
     }
+    .hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .hero-chips span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.38rem 0.75rem;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--text);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+    .hero-chips span i {
+      font-style: normal;
+      font-size: 0.62rem;
+      font-weight: 900;
+      color: var(--cyan);
+      opacity: 0.9;
+    }
+
+    /* ジャンプナビ */
+    .jump-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin: 0 -1.25rem 1.5rem;
+      padding: 0.55rem 1.25rem;
+      background: linear-gradient(180deg, rgba(7, 10, 18, 0.92), rgba(7, 10, 18, 0.72));
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .jump-nav::-webkit-scrollbar { display: none; }
+    .jump-nav-inner {
+      display: flex;
+      gap: 0.45rem;
+      min-width: min-content;
+      padding-bottom: 0.1rem;
+    }
+    .jump-nav a {
+      flex-shrink: 0;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: color 0.15s, background 0.15s, border 0.15s;
+    }
+    .jump-nav a:hover,
+    .jump-nav a:focus-visible {
+      color: var(--text);
+      background: var(--surface2);
+      border-color: var(--border);
+      outline: none;
+    }
+
+    /* 目次 */
     nav.toc {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.25rem 1.5rem;
+      padding: 1.35rem 1.35rem 1.2rem;
       margin-bottom: 2.5rem;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
     }
     nav.toc h2 {
-      margin: 0 0 0.75rem;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      font-weight: 700;
-    }
-    nav.toc ol { margin: 0; padding-left: 1.25rem; }
-    nav.toc a { color: var(--accent); text-decoration: none; font-weight: 600; }
-    nav.toc a:hover { text-decoration: underline; }
-    section { margin-bottom: 2.75rem; }
-    section h2 {
-      font-size: 1.2rem;
       margin: 0 0 1rem;
-      padding-top: 0.5rem;
-      scroll-margin-top: 1rem;
-      font-weight: 800;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
     }
-    section h3 {
-      font-size: 1.02rem;
-      margin: 1.5rem 0 0.5rem;
-      color: var(--text);
-      font-weight: 700;
+    nav.toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
     }
-    p { margin: 0 0 1rem; }
-    ul { margin: 0 0 1rem; padding-left: 1.35rem; }
-    li { margin-bottom: 0.35rem; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.25rem 1.35rem;
-      margin: 1rem 0;
-      box-shadow: var(--shadow-sm);
+    @media (min-width: 520px) {
+      nav.toc ol { grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; }
     }
-    .card strong { color: var(--text); }
-    .prompt-box {
-      background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
-      border: 1px solid #c7d2fe;
-      padding: 1.1rem 1.25rem;
-      margin: 1rem 0;
-      border-radius: var(--radius);
-      font-size: 0.92rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .prompt-box p:last-child { margin-bottom: 0; }
-    .note {
-      background: var(--warn-bg);
-      border: 1px solid #fcd34d;
-      border-radius: var(--radius);
-      padding: 1rem 1.15rem;
-      font-size: 0.9rem;
-      color: #78350f;
- margin: 1rem 0;
-    }
-    .note p:last-child { margin-bottom: 0; }
-    .flow { display: flex; flex-direction: column; gap: 0.5rem; margin: 1rem 0; }
-    .flow-step {
+    nav.toc li {
       display: flex;
-      gap: 0.75rem;
-      align-items: flex-start;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.86rem;
+      font-weight: 600;
     }
-    .flow-num {
+    nav.toc li::before {
+      content: counter(item, decimal-leading-zero);
+      counter-increment: item;
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: var(--cyan);
+      font-variant-numeric: tabular-nums;
+      min-width: 1.4rem;
+    }
+    nav.toc ol { counter-reset: item; }
+    nav.toc a {
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border 0.15s, color 0.15s;
+    }
+    nav.toc a:hover { border-bottom-color: rgba(34, 211, 238, 0.45); color: #fff; }
+
+    /* セクション */
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 5.5rem;
+    }
+    .sec-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      margin-bottom: 1.1rem;
+    }
+    .sec-badge {
       flex-shrink: 0;
-      width: 1.75rem;
-      height: 1.75rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
-      border-radius: 50%;
-      font-size: 0.75rem;
-      font-weight: 800;
+      min-width: 2.5rem;
+      height: 2.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 0.15rem;
-    }
-    footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
       font-size: 0.85rem;
+      font-weight: 900;
+      color: #0f172a;
+      background: linear-gradient(135deg, var(--cyan), #818cf8);
+      border-radius: 12px;
+      box-shadow: 0 8px 28px -8px rgba(34, 211, 238, 0.45);
+    }
+    section h2 {
+      font-size: 1.14rem;
+      font-weight: 900;
+      margin: 0;
+      line-height: 1.45;
+      letter-spacing: -0.02em;
+    }
+    section h3 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin: 1.5rem 0 0.5rem;
+      color: #e2e8f0;
+    }
+    p { margin: 0 0 1rem; color: #cbd5e1; }
+    ul { margin: 0 0 1rem; padding-left: 1.2rem; color: #cbd5e1; }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--dim); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.3rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .card strong { color: #fff; }
+    .prompt-box {
+      position: relative;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.09), rgba(167, 139, 250, 0.08));
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      padding: 1.15rem 1.25rem 1.15rem 83px;
+      margin: 1rem 0;
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+      box-shadow: var(--shadow);
+    }
+    .prompt-box::before {
+      content: "QUOTE";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      font-size: 0.58rem;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      opacity: 0.65;
+    }
+    @media (max-width: 520px) {
+      .prompt-box { padding-left: 1.15rem; padding-top: 2.2rem; }
+      .prompt-box::before {
+        transform: none;
+        top: 0.85rem;
+        left: 1.15rem;
+      }
+    }
+    .prompt-box p:last-child { margin-bottom: 0; }
+    .note {
+      background: rgba(251, 191, 36, 0.08);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      font-size: 0.9rem;
+      color: #fde68a;
+      margin: 1rem 0;
+    }
+    .note strong { color: #fff; }
+    .note p:last-child { margin-bottom: 0; }
+
+    .flow { display: flex; flex-direction: column; gap: 0.55rem; margin: 1rem 0; }
+    .flow-step { display: flex; gap: 0.85rem; align-items: flex-start; }
+    .flow-num {
+      flex-shrink: 0;
+      width: 1.85rem;
+      height: 1.85rem;
+      background: linear-gradient(135deg, var(--violet), var(--cyan));
+      color: #0f172a;
+      border-radius: 50%;
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.2rem;
+    }
+    .flow-step > div { color: #cbd5e1; }
+    .flow-step strong { color: #fff; }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.82rem;
       color: var(--muted);
     }
+    footer a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+    }
+    footer a:hover { border-bottom-color: var(--cyan); }
     code {
       font-family: ui-monospace, monospace;
       font-size: 0.88em;
-      background: #e2e8f0;
-      padding: 0.1em 0.35em;
-      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border);
+      padding: 0.12em 0.4em;
+      border-radius: 6px;
+      color: #e2e8f0;
     }
 
-    /* —— ビジュアル共通 —— */
-    figure.viz {
-      margin: 1.5rem 0;
-      padding: 0;
-    }
+    /* 図表 */
+    figure.viz { margin: 1.6rem 0; padding: 0; }
     figure.viz figcaption {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin: 0 0 0.75rem;
-      font-weight: 700;
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin: 0 0 0.65rem;
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
     }
     figure.viz figcaption::before {
       content: "";
-      width: 4px;
-      height: 1.1em;
+      width: 22px;
+      height: 3px;
       border-radius: 2px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      background: linear-gradient(90deg, var(--cyan), var(--violet));
     }
     .viz-surface {
-      background: var(--card);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 1.35rem 1.25rem;
+      padding: 1.35rem 1.2rem;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
     }
 
-    /* 横スクロール型ステップ（全体像） */
     .viz-pipeline-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      margin: 0 -0.25rem;
-      padding-bottom: 0.25rem;
+      margin: 0 -0.15rem;
+      padding-bottom: 0.35rem;
     }
     .viz-pipeline {
       display: flex;
       align-items: stretch;
-      gap: 0;
-      min-width: min(100%, 38rem);
+      min-width: min(100%, 40rem);
     }
     .viz-pipe-card {
       flex: 1;
-      min-width: 7.5rem;
-      background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+      min-width: 7.25rem;
+      background: linear-gradient(165deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.9rem 0.65rem;
+      border-radius: 14px;
+      padding: 0.95rem 0.55rem;
       text-align: center;
       position: relative;
-      box-shadow: var(--shadow-sm);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .viz-pipe-card .num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 1.85rem;
-      height: 1.85rem;
-      border-radius: 50%;
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: #fff;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      width: 1.9rem;
+      height: 1.9rem;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: #0f172a;
+      background: linear-gradient(135deg, var(--cyan), #818cf8);
       margin-bottom: 0.45rem;
     }
     .viz-pipe-card .lbl {
-      font-size: 0.78rem;
-      font-weight: 800;
+      font-size: 0.74rem;
+      font-weight: 900;
       line-height: 1.35;
-      color: var(--text);
+      color: #fff;
     }
     .viz-pipe-card .sub {
       display: block;
-      margin-top: 0.25rem;
-      font-size: 0.68rem;
+      margin-top: 0.3rem;
+      font-size: 0.65rem;
       color: var(--muted);
       font-weight: 600;
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .viz-pipe-arrow {
       display: flex;
       align-items: center;
-      padding: 0 0.15rem;
-      color: var(--muted);
-      font-size: 1.1rem;
-      font-weight: 300;
+      padding: 0 0.12rem;
+      color: var(--dim);
+      font-size: 1.15rem;
       user-select: none;
     }
     .viz-pipe-loop-note {
-      margin-top: 0.85rem;
+      margin-top: 1rem;
       text-align: center;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--muted);
-      font-weight: 600;
+      font-weight: 700;
     }
     .viz-pipe-loop-note span {
       display: inline-block;
-      padding: 0.25rem 0.75rem;
-      background: var(--accent-soft);
-      color: #3730a3;
+      padding: 0.35rem 0.9rem;
+      background: rgba(167, 139, 250, 0.12);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      color: #ddd6fe;
       border-radius: 999px;
     }
 
-    /* 縦タイムライン（悪い流れ・単純フロー） */
-    .viz-timeline {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      position: relative;
-    }
+    .viz-timeline { list-style: none; margin: 0; padding: 0; }
     .viz-timeline li {
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 0.85rem 1rem;
-      padding-bottom: 1.15rem;
-      position: relative;
+      padding-bottom: 1.1rem;
     }
     .viz-timeline li:last-child { padding-bottom: 0; }
     .viz-timeline li::before {
@@ -289,85 +505,77 @@
       grid-column: 1;
       width: 3px;
       margin-left: 0.72rem;
-      background: linear-gradient(180deg, var(--line-top, #cbd5e1), var(--line-bot, #94a3b8));
+      background: linear-gradient(180deg, var(--line-top, #475569), var(--line-bot, #334155));
       border-radius: 2px;
-      margin-top: 0.15rem;
-      height: calc(100% + 0.25rem);
-      align-self: start;
+      margin-top: 0.1rem;
+      height: calc(100% + 0.2rem);
     }
     .viz-timeline li:last-child::before { height: 100%; }
     .viz-timeline .dot {
       grid-column: 1;
       grid-row: 1;
-      width: 1.55rem;
-      height: 1.55rem;
+      width: 1.5rem;
+      height: 1.5rem;
       border-radius: 50%;
       background: var(--dot-bg, #64748b);
-      border: 3px solid #fff;
+      border: 3px solid var(--bg0);
       box-shadow: 0 0 0 1px var(--border);
       z-index: 1;
       justify-self: center;
-      align-self: start;
-      margin-top: 0.05rem;
     }
     .viz-timeline .box {
       grid-column: 2;
-      background: #f8fafc;
+      background: rgba(15, 23, 42, 0.55);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 0.75rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      line-height: 1.5;
+      padding: 0.78rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.55;
+      color: #e2e8f0;
     }
     .viz-timeline.warn {
-      --line-top: #fda4af;
-      --line-bot: #fb7185;
-      --dot-bg: #f43f5e;
+      --line-top: #fb7185;
+      --line-bot: #f43f5e;
+      --dot-bg: #fb7185;
     }
     .viz-timeline.warn .box {
-      background: #fff1f2;
-      border-color: #fecdd3;
-      color: #9f1239;
+      background: rgba(251, 113, 133, 0.08);
+      border-color: rgba(251, 113, 133, 0.35);
+      color: #fecdd3;
     }
 
-    /* チャット風 */
-    .viz-chat {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-    }
+    .viz-chat { display: flex; flex-direction: column; gap: 0.65rem; }
     .viz-msg {
       max-width: 92%;
-      padding: 0.75rem 1rem;
-      border-radius: 14px;
-      font-size: 0.88rem;
+      padding: 0.85rem 1.05rem;
+      border-radius: 16px;
+      font-size: 0.86rem;
       font-weight: 600;
-      line-height: 1.55;
-      position: relative;
-      box-shadow: var(--shadow-sm);
+      line-height: 1.6;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 40px -28px rgba(0,0,0,0.7);
     }
     .viz-msg .who {
       display: block;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 800;
-      margin-bottom: 0.25rem;
-      opacity: 0.85;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.28rem;
+      opacity: 0.75;
     }
     .viz-msg--you {
       align-self: flex-end;
-      background: var(--viz-you-bg);
-      border: 1px solid #cbd5e1;
-      color: #1e293b;
+      background: rgba(51, 65, 85, 0.65);
+      border-color: rgba(148, 163, 184, 0.35);
+      color: #f1f5f9;
       border-bottom-right-radius: 4px;
     }
     .viz-msg--ai {
       align-self: flex-start;
-      background: var(--viz-ai-bg);
-      border: 1px solid #bfdbfe;
-      color: #1e3a8a;
+      background: rgba(30, 58, 138, 0.45);
+      border-color: rgba(96, 165, 250, 0.35);
+      color: #dbeafe;
       border-bottom-left-radius: 4px;
     }
     .viz-chat-loop {
@@ -375,49 +583,39 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      padding: 0.45rem 0.75rem;
-      margin: 0.15rem 0;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #6d28d9;
-      background: #f5f3ff;
-      border: 1px dashed #c4b5fd;
+      padding: 0.5rem 0.85rem;
+      margin: 0.1rem 0;
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #c4b5fd;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px dashed rgba(167, 139, 250, 0.45);
       border-radius: 999px;
       align-self: center;
     }
 
-    /* ループ SVG */
-    .viz-svg-wrap {
-      width: 100%;
-      overflow: hidden;
-    }
-    .viz-svg-wrap svg {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+    .viz-svg-wrap { width: 100%; overflow: hidden; }
+    .viz-svg-wrap svg { width: 100%; height: auto; display: block; }
     .viz-sq {
-      fill: #fff;
-      stroke: var(--border);
-      stroke-width: 1.5;
+      fill: rgba(15, 23, 42, 0.65);
+      stroke: rgba(34, 211, 238, 0.35);
+      stroke-width: 1.25;
     }
-    .viz-sq-light { fill: #f8fafc; }
     .viz-arrow-line {
       fill: none;
-      stroke: #94a3b8;
-      stroke-width: 2;
+      stroke: #64748b;
+      stroke-width: 1.75;
       marker-end: url(#m-end);
     }
     .viz-arrow-loop {
       fill: none;
       stroke: url(#g-arrow);
-      stroke-width: 2.5;
+      stroke-width: 2.25;
       marker-end: url(#m-end2);
     }
-    .viz-lbl { font-size: 11px; font-weight: 700; fill: var(--text); }
-    .viz-lbl-sm { font-size: 10px; fill: var(--muted); font-weight: 600; }
+    .viz-lbl { font-size: 11px; font-weight: 800; fill: #f1f5f9; }
+    .viz-lbl-sm { font-size: 10px; fill: #94a3b8; font-weight: 600; }
 
-    /* 2カラム比較（地図・役割） */
     .viz-duo {
       display: grid;
       grid-template-columns: 1fr;
@@ -428,59 +626,59 @@
     }
     .viz-panel {
       border-radius: var(--radius);
-      padding: 1.15rem 1.2rem;
+      padding: 1.2rem 1.15rem;
       border: 1px solid var(--border);
       position: relative;
- overflow: hidden;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
     }
     .viz-panel[data-icon]::before {
       content: attr(data-icon);
       position: absolute;
       top: 0.65rem;
       right: 0.85rem;
-      font-size: 1.25rem;
-      opacity: 0.45;
-      font-weight: 800;
+      font-size: 1.15rem;
+      opacity: 0.5;
+      font-weight: 900;
     }
     .viz-panel--narrow {
-      background: linear-gradient(165deg, #fff1f2 0%, #ffe4e6 100%);
-      border-color: #fda4af;
+      background: linear-gradient(155deg, rgba(251, 113, 133, 0.12), rgba(15, 23, 42, 0.35));
+      border-color: rgba(251, 113, 133, 0.28);
     }
     .viz-panel--wide {
-      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 100%);
-      border-color: #6ee7b7;
+      background: linear-gradient(155deg, rgba(52, 211, 153, 0.12), rgba(15, 23, 42, 0.35));
+      border-color: rgba(52, 211, 153, 0.28);
     }
     .viz-panel--bad {
-      background: linear-gradient(165deg, #fff1f2 0%, #ffe4e6 100%);
-      border-color: #fda4af;
+      background: linear-gradient(155deg, rgba(251, 113, 133, 0.14), rgba(15, 23, 42, 0.4));
+      border-color: rgba(251, 113, 133, 0.35);
     }
     .viz-panel--ok {
-      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 100%);
-      border-color: #6ee7b7;
+      background: linear-gradient(155deg, rgba(52, 211, 153, 0.14), rgba(15, 23, 42, 0.4));
+      border-color: rgba(52, 211, 153, 0.35);
     }
     .viz-panel h4 {
       margin: 0 0 0.5rem;
-      font-size: 0.95rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #fff;
     }
-    .viz-panel p { margin: 0; font-size: 0.88rem; font-weight: 600; line-height: 1.6; color: #334155; }
+    .viz-panel p { margin: 0; font-size: 0.86rem; color: #cbd5e1 !important; font-weight: 600; }
     .viz-mini-steps {
       margin-top: 0.65rem;
       padding-left: 1rem;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
-      color: #475569;
+      color: #94a3b8;
       line-height: 1.55;
     }
 
-    /* 上司×部下 */
     .viz-mgmt {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.65rem;
-      padding: 0.5rem 0;
+      padding: 0.35rem 0;
     }
     .viz-avatar-row {
       display: flex;
@@ -495,54 +693,57 @@
       flex: 1;
       min-width: 8.5rem;
       text-align: center;
-      padding: 1rem 0.75rem;
+      padding: 1.05rem 0.75rem;
       border-radius: 14px;
       border: 1px solid var(--border);
-      background: #fff;
-      box-shadow: var(--shadow-sm);
+      background: rgba(15, 23, 42, 0.45);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
     }
     .viz-person .icon {
-      width: 2.5rem;
-      height: 2.5rem;
- margin: 0 auto 0.45rem;
+      width: 2.6rem;
+      height: 2.6rem;
+      margin: 0 auto 0.5rem;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
     }
+    .viz-person .icon svg { width: 1.35rem; height: 1.35rem; opacity: 0.95; }
     .viz-person--boss .icon {
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.35), rgba(245, 158, 11, 0.2));
+      border: 1px solid rgba(251, 191, 36, 0.35);
     }
     .viz-person--staff .icon {
-      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(129, 140, 248, 0.22));
+      border: 1px solid rgba(34, 211, 238, 0.3);
     }
     .viz-person .role {
-      font-size: 0.72rem;
-      font-weight: 800;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: var(--dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--muted);
     }
     .viz-person .name {
-      font-size: 0.95rem;
-      font-weight: 800;
-      margin-top: 0.15rem;
-      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 900;
+      margin-top: 0.2rem;
+      color: #fff;
+      line-height: 1.45;
     }
     .viz-bidir {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--accent);
-      padding: 0.35rem 0.65rem;
-      background: var(--accent-soft);
+      align-self: center;
+      font-size: 0.74rem;
+      font-weight: 900;
+      color: var(--cyan);
+      padding: 0.4rem 0.75rem;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.28);
       border-radius: 999px;
     }
 
-    /* レガシー compare（§1互換） */
     .compare {
       display: grid;
       grid-template-columns: 1fr;
@@ -554,62 +755,71 @@
     }
     .compare-box {
       border-radius: var(--radius);
-      padding: 1rem 1.1rem;
+      padding: 1.15rem 1.15rem;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(8px);
     }
     .compare-box h4 {
-      margin: 0 0 0.6rem;
-      font-size: 0.75rem;
-      font-weight: 800;
+      margin: 0 0 0.55rem;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
     }
-    .compare-box.bad { background: var(--compare-bad-bg, #fff1f2); border-color: #fecaca; }
-    .compare-box.bad h4 { color: #991b1b; }
-    .compare-box.good { background: #ecfdf5; border-color: #bbf7d0; }
-    .compare-box.good h4 { color: #166534; }
-    .compare-box p:last-child { margin-bottom: 0; }
+    .compare-box.bad {
+      background: rgba(251, 113, 133, 0.08);
+      border-color: rgba(251, 113, 133, 0.35);
+    }
+    .compare-box.bad h4 { color: #fda4af; }
+    .compare-box.good {
+      background: rgba(52, 211, 153, 0.08);
+      border-color: rgba(52, 211, 153, 0.3);
+    }
+    .compare-box.good h4 { color: #6ee7b7; }
+    .compare-box p { margin: 0; font-size: 0.86rem; color: #cbd5e1; font-weight: 600; }
 
-    .overview-strip {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.4rem 0.55rem;
-      margin: 1.25rem 0 0;
-      padding: 1rem 1.1rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.88rem;
-      line-height: 1.55;
-      box-shadow: var(--shadow-sm);
+    .viz-note-inline {
+      margin: 0.35rem 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: center;
     }
-    .overview-strip .step-pill {
-      background: linear-gradient(135deg, #e0e7ff, #dbeafe);
-      color: #312e81;
-      padding: 0.28rem 0.65rem;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: 0.78rem;
-      white-space: nowrap;
-      border: 1px solid #c7d2fe;
+    .viz-note-inline.accent {
+      color: var(--cyan);
+      font-weight: 900;
     }
-    .overview-strip .arrow { color: var(--muted); user-select: none; font-weight: 300; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <div class="layout">
+    <header class="hero">
+      <p class="hero-eyebrow">Playbook</p>
       <h1>わからないからできないをなくす<br />— AIの使い方（対話・マネジメントの考え方）</h1>
-      <p class="lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい「進め方」の設計図として使えます。</p>
-      <p class="overview-strip" aria-label="全体の流れ（要約）">
-        <span class="step-pill">1. 状況・目的</span><span class="arrow">→</span>
-        <span class="step-pill">2. AIに質問させる</span><span class="arrow">→</span>
-        <span class="step-pill">3. 納得して実行</span><span class="arrow">→</span>
-        <span class="step-pill">4. 結果を次へ</span>
-      </p>
+      <p class="hero-lead">文字起こしを整理し、他の人の学び用にカリキュラム形式でまとめたメモです。正しさの保証ではなく、実務で試してよい「進め方」の設計図として使えます。</p>
+      <div class="hero-chips" aria-label="要点の短い流れ">
+        <span><i>01</i> 状況・目的</span>
+        <span><i>02</i> AIに質問させる</span>
+        <span><i>03</i> 納得して実行</span>
+        <span><i>04</i> 結果を次へ</span>
+      </div>
     </header>
+
+    <nav class="jump-nav" aria-label="章へジャンプ">
+      <div class="jump-nav-inner">
+        <a href="#fig-overview">全体像</a>
+        <a href="#why-bad-first">§1 聞き方</a>
+        <a href="#better-start">§2 伝えること</a>
+        <a href="#loop">§3 ループ</a>
+        <a href="#over-spec">§4 指示の幅</a>
+        <a href="#doctor">§5 比喩</a>
+        <a href="#paradigm">§6 思考</a>
+        <a href="#responsibility">§7 責任</a>
+        <a href="#tools">§8 ツール</a>
+      </div>
+    </nav>
 
     <figure class="viz" id="fig-overview">
       <figcaption>全体像：情報を先に揃えてから動く</figcaption>
@@ -652,7 +862,7 @@
     </figure>
 
     <nav class="toc" aria-label="目次">
-      <h2>目次</h2>
+      <h2>Contents</h2>
       <ol>
         <li><a href="#fig-overview">全体像（図）</a></li>
         <li><a href="#why-bad-first">最初に「どうすればいい？」と聞くと弱くなる理由</a></li>
@@ -667,7 +877,10 @@
     </nav>
 
     <section id="why-bad-first">
-      <h2>1. 最初に「どうすればいい？」と聞くと弱くなる理由</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">1</span>
+        <h2>最初に「どうすればいい？」と聞くと弱くなる理由</h2>
+      </div>
       <p>情報が足りないままAIに結論を求めると、AIは足りない前提のまま考え始めます。その結果、アウトプットの当たり外れが大きくなりやすい。</p>
       <div class="compare" aria-label="聞き方の対比">
         <div class="compare-box bad">
@@ -695,7 +908,10 @@
     </section>
 
     <section id="better-start">
-      <h2>2. 代わりに最初に伝えること</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">2</span>
+        <h2>代わりに最初に伝えること</h2>
+      </div>
       <p>次の3つをセットで伝える。</p>
       <ul>
         <li><strong>今の状況</strong>（わかる範囲で事実ベース）</li>
@@ -730,7 +946,10 @@
     </section>
 
     <section id="loop">
-      <h2>3. 次の課題にする・納得して実行するループ</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">3</span>
+        <h2>次の課題にする・納得して実行するループ</h2>
+      </div>
       <p>出たアウトプットを、そのまま正解として採用せず<strong>次の課題</strong>にする。経験が浅いときは「どれを実行すべきか」が分からなくて当然なので、次のようにAIを使うと進みやすい。</p>
       <ul>
         <li>各案について、<strong>なぜ効きそうか／理屈</strong>を説明させる</li>
@@ -748,14 +967,14 @@
             <svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
                 <linearGradient id="g-arrow" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:#6366f1" />
-                  <stop offset="100%" style="stop-color:#2563eb" />
+                  <stop offset="0%" style="stop-color:#22d3ee" />
+                  <stop offset="100%" style="stop-color:#818cf8" />
                 </linearGradient>
                 <marker id="m-end" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                  <path d="M0,0 L8,4 L0,8 Z" fill="#94a3b8" />
+                  <path d="M0,0 L8,4 L0,8 Z" fill="#64748b" />
                 </marker>
                 <marker id="m-end2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
-                  <path d="M0,0 L9,4.5 L0,9 Z" fill="#6366f1" />
+                  <path d="M0,0 L9,4.5 L0,9 Z" fill="#22d3ee" />
                 </marker>
               </defs>
               <rect class="viz-sq" x="170" y="20" width="140" height="52" rx="12" />
@@ -778,7 +997,7 @@
               <text class="viz-lbl-sm" x="240" y="274" text-anchor="middle">次の「状況・目的」へ</text>
 
               <path class="viz-arrow-loop" d="M 310 260 C 420 260 430 50 310 46" fill="none" />
-              <text class="viz-lbl-sm" x="395" y="155" text-anchor="middle" fill="#6366f1" font-weight="800">次へ</text>
+              <text class="viz-lbl-sm" x="395" y="155" text-anchor="middle" fill="#22d3ee" font-weight="800">次へ</text>
             </svg>
           </div>
         </div>
@@ -786,7 +1005,10 @@
     </section>
 
     <section id="over-spec">
-      <h2>4. 具体指示しすぎると起きること</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">4</span>
+        <h2>具体指示しすぎると起きること</h2>
+      </div>
       <h3>ターンバイターンのナビの比喩</h3>
       <p>道順を極端に細かく指定すると、相手（実行側）はその通りに動きやすくなり、<strong>ショートカットや別解</strong>を見つける余地が減る。AIへの指示も同様で、「細かすぎる手順の丸投げ」は発想の幅を狭めることがある。</p>
       <h3>一方で効く聞き方</h3>
@@ -823,7 +1045,10 @@
     </section>
 
     <section id="doctor">
-      <h2>5. 医者と患者の比喩</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">5</span>
+        <h2>医者と患者の比喩</h2>
+      </div>
       <p>患者がやるのは、決めつけた病名の主張より、<strong>観測できる症状・経過の報告</strong>。診断は、情報を聞いた側（医者／AI側）が整理する。</p>
       <ul>
         <li>「これは絶対〇〇だ」と結論を先に言うと、報告の質が落ち、入力が歪み、アウトプットもズレやすい</li>
@@ -847,7 +1072,10 @@
     </section>
 
     <section id="paradigm">
-      <h2>6. パラダイムと注意点</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">6</span>
+        <h2>パラダイムと注意点</h2>
+      </div>
       <div class="flow">
         <div class="flow-step">
           <span class="flow-num">1</span>
@@ -870,25 +1098,32 @@
           <div class="viz-mgmt">
             <div class="viz-avatar-row">
               <div class="viz-person viz-person--boss">
-                <div class="icon" aria-hidden="true">人</div>
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
                 <div class="role">You</div>
                 <div class="name">仮説・優先順位<br />リスク許容</div>
               </div>
               <div class="viz-bidir" aria-hidden="true">⇄</div>
               <div class="viz-person viz-person--staff">
-                <div class="icon" aria-hidden="true">AI</div>
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+                </div>
                 <div class="role">Partner</div>
                 <div class="name">質問・整理<br />反例・文章案</div>
               </div>
             </div>
-            <p style="margin:0.25rem 0 0;font-size:0.82rem;color:var(--muted);font-weight:600;text-align:center;">一方向に流しっぱなしにせず、ツッコミと優先づけを返す</p>
+            <p class="viz-note-inline">一方向に流しっぱなしにせず、ツッコミと優先づけを返す</p>
           </div>
         </div>
       </figure>
     </section>
 
     <section id="responsibility">
-      <h2>7. 責任は自分：AIは優秀な部下</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">7</span>
+        <h2>責任は自分：AIは優秀な部下</h2>
+      </div>
       <p>AIは責任を取らない。だから<strong>「言われたからやる」では終わらない</strong>。部下が提案してきたときと同じで、納得したうえで意思決定する。</p>
       <ul>
         <li><strong>なぜその答えか</strong>をAIに説明させ、角のケースや反例も掘る</li>
@@ -903,18 +1138,22 @@
           <div class="viz-mgmt">
             <div class="viz-avatar-row" style="max-width: 22rem;">
               <div class="viz-person viz-person--boss">
-                <div class="icon" aria-hidden="true">指</div>
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><path d="M12 3l2 4 4 .5-3 3 1 4.5L12 14l-4 1.5 1-4.5-3-3 4-.5z"/></svg>
+                </div>
                 <div class="role">上司（あなた）</div>
                 <div class="name">意思決定<br />説明責任</div>
               </div>
               <div class="viz-bidir">根拠⇄質問</div>
               <div class="viz-person viz-person--staff">
-                <div class="icon" aria-hidden="true">僚</div>
+                <div class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><ellipse cx="12" cy="5" rx="5" ry="2"/><path d="M7 5v6c0 1.5 2.5 3 5 3s5-1.5 5-3V5"/><path d="M7 11c0 1.5 2.5 3 5 3s5-1.5 5-3"/></svg>
+                </div>
                 <div class="role">部下（AI）</div>
                 <div class="name">提案・根拠<br />反例の補足</div>
               </div>
             </div>
-            <p style="margin:0.6rem 0 0;font-size:0.88rem;font-weight:700;text-align:center;color:var(--accent);">納得 → 実行と検証（責任は常にこちら）</p>
+            <p class="viz-note-inline accent">納得 → 実行と検証（責任は常にこちら）</p>
           </div>
         </div>
       </figure>
@@ -931,7 +1170,10 @@
     </section>
 
     <section id="tools">
-      <h2>8. ツールの一例（発言メモ）</h2>
+      <div class="sec-head">
+        <span class="sec-badge" aria-hidden="true">8</span>
+        <h2>ツールの一例（発言メモ）</h2>
+      </div>
       <p>活字を読む習慣がない人でも、動画は見つつ、基本はチャットで試す、という運用もアリ。発言では <strong>Claude</strong> を軸に据える余地がある、との整理があった（環境や契約に合わせて選択する）。</p>
     </section>
 
